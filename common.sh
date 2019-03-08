@@ -70,6 +70,38 @@ EOF
     echo $port
 }
 
+genpkey(){
+    :<<EOF
+openssl genpkey を呼び出す
+genpkey $key $pass $enc $alg $opt
+key=./ca/server-ca-1/certs/www.example.com/key.pem
+pass=./pass.txt
+enc=aes256
+alg=rsa
+genpkey "$key" "$key_nopass" "$pass" "$enc" rsa rsa_keygen_bits:2048
+genpkey "$key" "$key_nopass" "$pass" "$enc" ec ec_paramgen_curve:secp384r1 ec_param_enc:named_curve
+? genpkey "$key" "$key_nopass" "$pass" "$enc" ec ec_paramgen_curve:P-256 ec_param_enc:named_curve
+? genpkey "$key" "$key_nopass" "$pass" "$enc" ec ec_paramgen_curve:prime256v1 ec_param_enc:named_curve
+EOF
+    local key=$1
+    shift
+    local key_nopass=$1
+    shift
+    local pass=$1
+    shift
+    local enc=$1
+    shift
+    local alg=$1
+    shift
+    local pkeyopt=""
+    for opt in $*
+    do
+	pkeyopt=" $pkeyopt -pkeyopt $opt"
+    done
+    openssl genpkey -out "$key" -pass file:"$pass" -"$enc" -algorithm "$alg" $pkeyopt
+    openssl pkey -in "$key" -out "$key_nopass" -passin file:"$pass"
+}
+
 if [ "$0" = "-bash" ]
 then
     return

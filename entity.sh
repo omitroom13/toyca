@@ -21,9 +21,12 @@ EOF
 	echo "WARNING $TOP is not subdirectory of $(pwd). rm -f canceled."
     fi
     mkdir -p $TOP
-    #$REQ -new -newkey ec:<(openssl ecparam -name prime256v1) \
-    $REQ -new -newkey rsa:2048 \
-	 -keyout $key -out $req -passout file:$PASS -subj "$DN"
+    #$REQ -new -newkey ec:<(openssl ecparam -name prime256v1) 
+    key_nopass="${TOP}/key-nopass.pem"
+    genpkey "$key" "$key_nopass" "$PASS" aes256 rsa rsa_keygen_bits:2048
+    $REQ -new -key "$key" -out "$req" -passin file:$PASS -subj "$DN"
+    # $REQ -new -newkey rsa:2048 \
+    # 	 -keyout $key -out $req -passout file:$PASS -subj "$DN"
     $CA -batch -out $cert -keyfile $CAKEY -passin file:$PASS \
 	-name ca_any -extensions ext_enterprise -startdate $START -enddate $END \
 	-infiles $req
@@ -54,8 +57,11 @@ EOF
 	echo "WARNING $TOP is not subdirectory of $(pwd). rm -f canceled."
     fi
     mkdir -p $TOP
-    $REQ -new -newkey ec:<(openssl ecparam -name prime256v1) \
-	 -keyout $key -out $req -passout file:$PASS -subj "$DN"
+    key_nopass="${TOP}/key-nopass.pem"
+    genpkey "$key" "$key_nopass" "$PASS" aes256 ec ec_paramgen_curve:P-256 ec_param_enc:named_curve
+    $REQ -new -key "$key" -out "$req" -passin file:$PASS -subj "$DN"
+    # $REQ -new -newkey ec:<(openssl ecparam -name prime256v1) \
+    # 	 -keyout $key -out $req -passout file:$PASS -subj "$DN"
     $CA -batch -out $cert -keyfile $CAKEY -passin file:$PASS \
 	-name ca_any -policy policy_any -extensions ext_client -startdate $START -enddate $END \
 	-infiles $req
@@ -91,9 +97,9 @@ EOF
 	echo "WARNING $TOP is not subdirectory of $(pwd). rm -f canceled."
     fi
     mkdir -p $TOP
-    #$REQ -new -newkey ec:<(openssl ecparam -name prime256v1) \
-    $REQ -new -newkey rsa:2048 \
-	 -keyout "$key" -out "$req" -passout file:$PASS -subj "$DN"
+    key_nopass="${TOP}/key-nopass.pem"
+    genpkey "$key" "$key_nopass" "$PASS" aes256 rsa rsa_keygen_bits:2048
+    $REQ -new -key "$key" -out "$req" -passin file:$PASS -subj "$DN"
     $CA -batch -out "$cert" -keyfile $CAKEY -passin file:$PASS \
 	-name ca_any -policy policy_any -extensions ext_server -startdate $START -enddate $END \
 	-infiles "$req"
@@ -109,12 +115,8 @@ EOF
 EOF
 	exit 1
     fi
-    
-    key_nopass="${TOP}/key-nopass.pem"
     cert_im=${TOP}/cert-im.pem
     pkcs12=${TOP}/pkcs12.pfx
-    openssl rsa -in $key -out ${key_nopass} -passin file:$PASS 
-    #openssl ec -in $key -out ${key_nopass} -passin file:$PASS
     openssl x509 -in $cert    > ${cert_im}
     openssl x509 -in $CACERT >> ${cert_im}
     $PKCS12 -export -in "$cert" -inkey "$key" -out "$pkcs12" -certfile $CACERT -passin file:$PASS -passout file:$PASS
@@ -138,8 +140,11 @@ EOF
 	echo "WARNING $TOP is not subdirectory of $(pwd). rm -f canceled."
     fi
     mkdir -p $TOP
-    $REQ -new -newkey ec:<(openssl ecparam -name prime256v1) \
-	 -keyout "$key" -out "$req" -passout file:$PASS -subj "$DN"
+    key_nopass="${TOP}/key-nopass.pem"
+    genpkey "$key" "$key_nopass" "$PASS" aes256 ec ec_paramgen_curve:P-256 ec_param_enc:named_curve
+    $REQ -new -key "$key" -out "$req" -passin file:$PASS -subj "$DN"
+    # $REQ -new -newkey ec:<(openssl ecparam -name prime256v1) \
+    # 	 -keyout "$key" -out "$req" -passout file:$PASS -subj "$DN"
     $CA -batch -out "$cert" -keyfile $CAKEY -passin file:$PASS \
 	-name ca_any -policy policy_any -extensions ext_server -startdate $START -enddate $END \
 	-infiles "$req"
@@ -159,7 +164,7 @@ EOF
 }
 
 gen_cert_client_yubikey() {
-        : <<EOF
+    : <<EOF
 yubikey ようにクライアント証明書を生成する
 EOF
     if [ ! `exist_yubikey` ]
@@ -251,11 +256,11 @@ EOF
     export SAN="email:${cn}@example.com, otherName:msUPN;UTF8:${cn}@example.com"
     #export MAIL=mo@fourthcoffee.com
     #export MAIL=moortimo@fourthcoffee.com
-    if [ `exist_yubikey` ]
-    then
-	init_yubikey
-	gen_cert_client_yubikey $START_EE $END_EE $cn "$dn" "" ""
-    fi
+    # if [ `exist_yubikey` ]
+    # then
+    # 	init_yubikey
+    # 	gen_cert_client_yubikey $START_EE $END_EE $cn "$dn" "" ""
+    # fi
 }
 
 if [ "$0" = "-bash" ]
