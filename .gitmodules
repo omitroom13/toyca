@@ -1,0 +1,4 @@
+[submodule "doc/build/html"]
+	path = doc/build/html
+	url = git@github.com:omitroom13/toyca.git
+	branch = gh-pages

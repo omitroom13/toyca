@@ -46,6 +46,7 @@ _ReSharper*/
 _build
 _static
 _templates
+doc/build/doctrees
 
 #python
 *.pyc
