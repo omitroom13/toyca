@@ -1,0 +1,125 @@
+# 参考文献・メモ
+
+正式なドキュメントにはあまり入れるべきでない、自分宛てメモ
+
+## ToDo
+
+### sphinx
+
+ユーザにビルドさせるのは無理があった？
+リポジトリに入れるべき？
+docker 内でビルドするべき？
+
+### 機能
+
+- 証明書の暗号方式を最低限次の2つから選択できるようにする
+  - prime256v1
+  - rsa:2048
+
+### ディレクトリ構成
+
+- nginx.conf は www とかに移動
+- 生成した証明書類は _build とかに移動
+
+### 加えるべきデモ・テスト
+- ocsp responder
+  - ocsp stapling の前提。openssl で動けばよいか..
+  - [OpenCA/ocspd](https://www.gleas.jp/wp-content/uploads/2015/06/GleasWhitepaper_1509_OCSPResponder.pdf)
+  - [openssl ocsp 1](https://hogem.hatenablog.com/entry/20140509/1399588017)
+  - [oepnssl ocsp 2](http://d.hatena.ne.jp/blooper/20120912/1347465070)
+  - [mod_gnutls](https://mod.gnutls.org/browser/mod_gnutls/test/data/ocsp.cgi)
+- Authority Information Access
+  - まともに設定してしまうと、中間認証局証明書の設定が間違っていることに気づかず混乱する(IEでだけAIAにフォールバックして解決してしまう)可能性があり、設定しないほうが良い気がしてきた。認証局にアクセスしたことが伝わってしまうという点にもなんか問題がある気がする
+- CRL Distribution Point
+  - OCSP stapling のほうが優先?
+- クライアントを使ったテスト
+  - 機能的には chrome/firefox である必要はない。証明書リポジトリの操作もそう簡単ではない。openssl s_client は単体テストで扱えばよいとすると、wget/curl で済ませるのがよさそう
+  - hostsやリポジトリを修正してテストするのであれば、テストする場所はコンテナ内のほうが良さそう
+- パケットキャプチャ
+  - server/client hello の確認
+  - PFS の確認
+  - cipersuite の確認
+  - 復号
+	- 秘密鍵で復号できること
+	- PFSでは秘密鍵があっても復号できないこと
+	- PFSでもセッションキーがあれば復号できること
+- 証明書の失効
+  - CRL
+	- 一応
+  - OCSP
+	- コンテナで建てやすいなら
+  - OCSP stapling
+	- これはやっておいたほうが良さそうな気がする
+- IPv6
+  - [最近の証明書の話題(2): CloudFlare DNS 1.1.1.1サイトのIPv6証明書](http://blog.livedoor.jp/k_urushima/archives/1839342.html)
+  - ssl/tls の観点ではあまり有意義ではないかも
+- Public Key Pinning
+  - どうもブラウザにpinを添付できる最大手サイトでないと実用レベルの運用はできなさそう。優先度は低いだろう
+- HTTP2
+  - ssl/tls の観点ではあまり有意義ではないかも
+- HSTS
+  - ssl/tls の観点ではあまり有意義ではないかも
+
+ssl_ciphers 'PSK-NULL-SHA'; とかにしてエラーが出ることを確認する
+この辺のメモどこいった？？
+```
+openssl ciphers -v 'kECDHE+aECDSA+AESGCM:kDH+aDH+AES:k:!SHA1'
+```
+
+### テストで再現したいエラー
+
+- Cannot communicate securely with peer: no common encryption algorithm(s). エラーコード: SSL_ERROR_NO_CYPHER_OVERLAP 
+  - Firefox でウェブサーバに接続したときに発生
+  - ca.conf の ssl_ciphers が不適切
+  - ブラウザの使用暗号スイートを確認する(ページ情報/セキュリティ/技術情報)
+- Peer’s certificate has an invalid signature. エラーコード: SEC_ERROR_BAD_SIGNATURE 
+  - Firefox でウェブサーバに接続したときに発生
+  - ルート証明書がブラウザにインストールされていない
+
+## 証明書リポジトリの操作
+
+### Ubuntu
+
+Ubuntu で独自に認証局証明書を追加する場合、 /usr/local/share/ca-certificates 以下に置いてコマンド
+
+```
+sudo update-ca-certificates
+```
+
+で /etc/ca-certificates.conf に反映される。 curl や git はこれで対応できるようだ。
+
+ホストのブラウザの以下を加える
+
+- [debian環境のルート証明書を更新した話](https://kamatari.github.io/2015/03/12/how-to-install-root-certificate-on-debian/)
+  - python の urllib
+  - curl
+- [ubuntuに自己認証局の証明書を登録](https://mistymagich.wordpress.com/2012/01/17/ubuntu%E3%81%AB%E8%87%AA%E5%B7%B1%E8%AA%8D%E8%A8%BC%E5%B1%80%E3%81%AE%E8%A8%BC%E6%98%8E%E6%9B%B8%E3%82%92%E7%99%BB%E9%8C%B2/)
+  - git
+
+### Firefox
+
+- [Firefox 52以降でのルート証明書の自動インポート機能でできること、できないこと](http://www.clear-code.com/blog/2017/6/1.html)
+  - Windows の場合は管理者がOSにインストールした証明書をインポートする機能があるようだ
+
+## cipher suite
+
+### AESGCM
+
+[理解してるつもりの SSL/TLS でも、もっと理解したら面白かった話](http://tkengo.github.io/blog/2015/12/01/https-details/)
+> 暗号化と同時に完全性や認証性も実現するための暗号方式 (たとえば GCM) が考案され、それらを総称して AEDA (Authenticated Encryption with Asocciated Data) と呼ばれます。暗号スイートの Mac の部分に AEAD という表記があるものは、暗号モードとして認証付き暗号の GCM が利用されています。
+
+AESGCM とした場合 mac は指定せず 'ECDH+aRSA+AESGCM' などとするようだ。ECDH+aRSA+AESGCM+SHA256 としてもヒットしない。
+
+```
+$ openssl ciphers -v 'ECDH+aRSA+AESGCM'
+ECDHE-RSA-AES256-GCM-SHA384 TLSv1.2 Kx=ECDH     Au=RSA  Enc=AESGCM(256) Mac=AEAD
+ECDHE-RSA-AES128-GCM-SHA256 TLSv1.2 Kx=ECDH     Au=RSA  Enc=AESGCM(128) Mac=AEAD
+
+$ openssl ciphers -v 'ECDH+aRSA+AESGCM+AEAD'
+Error in cipher list
+139825319563712:error:1410D0B9:SSL routines:SSL_CTX_set_cipher_list:no cipher match:../ssl/ssl_lib.c:2129:
+
+$ openssl ciphers -v 'ECDH+aRSA+AESGCM+SHA'
+Error in cipher list
+140489317126592:error:1410D0B9:SSL routines:SSL_CTX_set_cipher_list:no cipher match:../ssl/ssl_lib.c:2129:
+```

@@ -1,0 +1,424 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>その他 &mdash; ToyCA  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="参考文献・メモ" href="03.html" />
+    <link rel="prev" title="方針" href="01.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ToyCA
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01.html">方針</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">その他</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#vfQTy">テスト</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#r32qB">注意点</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hguGg">運用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#4hd9e">サーバ証明書の生成</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#localhost">例:localhost</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#1kTkd">コード証明書の生成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#windows">コード署名先の Windows アプリケーション</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#k7Tog">参考</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#revoke">revoke</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="03.html">参考文献・メモ</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ToyCA</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>その他</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/02.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="3hITz">
+<span id="id1"></span><h1>その他<a class="headerlink" href="#3hITz" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="vfQTy">
+<span id="id2"></span><h2>テスト<a class="headerlink" href="#vfQTy" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="r32qB">
+<span id="id3"></span><h3>注意点<a class="headerlink" href="#r32qB" title="Permalink to this headline">¶</a></h3>
+<p>ca.cnf の ENV は定義できていないとエラーになる</p>
+</div>
+</div>
+<div class="section" id="hguGg">
+<span id="id4"></span><h2>運用<a class="headerlink" href="#hguGg" title="Permalink to this headline">¶</a></h2>
+<p>検証用の手順として意図的に以下のような行いをしている。PKIの運用とはかけ離れているので、本番環境の手順に使用しないこと</p>
+<ul class="simple">
+<li>証明書の要求者と署名者を分掌していない</li>
+<li>平文で取りまわすなど、秘密鍵の扱いが適当</li>
+</ul>
+<div class="section" id="4hd9e">
+<span id="id5"></span><h3>サーバ証明書の生成<a class="headerlink" href="#4hd9e" title="Permalink to this headline">¶</a></h3>
+<p>デモ用に生成された認証局でサーバ用途のものは servaer-ca-N (N=1, 2)なので、それを用いて生成する。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ca=&quot;server-ca-1&quot;
+$ cn=&quot;www.example.com&quot;
+$ san=&quot;DNS:${cn}, DNS:www1.example.net, DNS:www2.example.net&quot;
+$ ./ca.sh gen_cert_server &quot;$ca&quot; &quot;$cn&quot; &quot;$san&quot;
+</pre></div>
+</div>
+<p>生成された証明書は以下にある。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ serial=$(tail -n1 ca/${ca}/index.txt | awk &#39;{print $3}&#39;)
+$ ls ./ca/$ca/certs/$serial-$cn
+cert-im.pem  cert.pem  key-nopass.pem  key.pem  pkcs12.pfx  req.pem
+</pre></div>
+</div>
+<ul class="simple">
+<li>req.pem<ul>
+<li>証明書要求</li>
+</ul>
+</li>
+<li>key-nopass.pem<ul>
+<li>平文の秘密鍵</li>
+</ul>
+</li>
+<li>key.pem<ul>
+<li>暗号化された秘密鍵</li>
+</ul>
+</li>
+<li>cert.pem<ul>
+<li>サーバ証明書</li>
+</ul>
+</li>
+<li>cert-im.pem<ul>
+<li>中間認証局($ca)証明書つきのサーバ証明書。apache/nginx などで使用する</li>
+</ul>
+</li>
+<li>pkcs12.pfx<ul>
+<li>cert-im.pem と key.pem をまとめたもの(PKCS12形式)。IIS などで使用する</li>
+</ul>
+</li>
+</ul>
+<div class="section" id="localhost">
+<span id="3XbPR"></span><h4>例:localhost<a class="headerlink" href="#localhost" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ca=&quot;server-ca-1&quot;
+$ cn=&quot;localhost&quot;
+$ san=&quot;DNS:localhost, IP:127.0.0.1, IP:::1&quot;
+$ ./ca.sh gen_cert_server &quot;$ca&quot; &quot;$cn&quot; &quot;$san&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="1kTkd">
+<span id="id6"></span><h3>コード証明書の生成<a class="headerlink" href="#1kTkd" title="Permalink to this headline">¶</a></h3>
+<p>Windows アプリケーションにコード署名するためのツールといえば  <a class="reference external" href="https://docs.microsoft.com/ja-jp/dotnet/framework/tools/signtool-exe">SignTool.exe</a> だが、<a class="reference external" href="https://stackoverflow.com/questions/18287960/signing-windows-application-on-linux-based-distros">osslsigncode</a> を使えば Linux で .exe に署名することもできる。</p>
+<p>デモ用に生成された認証局でサーバ用途のものは servaer-ca-N (N=1, 2)なので、それを用いて生成する。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>. ./ca.sh
+ca=&quot;choroi-ca-1&quot;
+START=$(lifetime &#39;+%Y/%m/01&#39; &quot;-1 years 0 months&quot;)
+END=$(lifetime &#39;+%Y/%m/01&#39; &quot;1 years 0 months&quot;)
+CN=&quot;Microsoft Windows&quot;
+cn=$(basename $CN)
+DN=&quot;/C=US/ST=Washington/L=Redmond/O=Microsoft Corporation/CN=$CN&quot;
+set_ca $ca
+init_ca_param $START $END &quot;$CN&quot; &quot;$DN&quot;
+echo $key
+echo $req
+echo $CAKEY
+echo $PASS
+#SANが定義されていないと、意味不明なエラーになる
+export SAN=&quot;DNS:*.example.com&quot;
+rm -rf &quot;$TOP&quot;
+mkdir -p &quot;$TOP&quot;
+$REQ -new -newkey rsa:2048 -keyout &quot;$key&quot; -out &quot;$req&quot; -passout file:$PASS -subj &quot;$DN&quot;
+key_nopass=&quot;${TOP}/key-nopass.pem&quot;
+openssl rsa -in &quot;$key&quot; -out &quot;${key_nopass}&quot; -passin file:$PASS 
+$CA -batch -out &quot;$cert&quot; -keyfile $CAKEY -passin file:$PASS \
+    -name ca_any -policy policy_choroi -extensions ext_server -startdate $START -enddate $END \
+    -infiles &quot;$req&quot;
+pkcs12=${TOP}/pkcs12.pfx
+$PKCS12 -export -in &quot;$cert&quot; -inkey &quot;$key&quot; -out &quot;$pkcs12&quot; -certfile $CACERT -passin file:$PASS -passout file:$PASS
+serial=$(tail -n1 ca/${ca}/index.txt | awk &#39;{print $3}&#39;)
+rm -rf &quot;$CATOP/certs/$serial-$CN&quot;
+mkdir -p &quot;$CATOP/certs/$serial-$CN&quot;
+cp &quot;$TOP&quot;/* &quot;$CATOP/certs/$serial-$CN/&quot;
+unset_ca_param
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="s2">&quot;./ca/$ca/certs/$serial-$CN&quot;</span>
+<span class="n">cert</span><span class="o">-</span><span class="n">im</span><span class="o">.</span><span class="n">pem</span>  <span class="n">cert</span><span class="o">.</span><span class="n">pem</span>  <span class="n">key</span><span class="o">-</span><span class="n">nopass</span><span class="o">.</span><span class="n">pem</span>  <span class="n">key</span><span class="o">.</span><span class="n">pem</span>  <span class="n">pkcs12</span><span class="o">.</span><span class="n">pfx</span>  <span class="n">req</span><span class="o">.</span><span class="n">pem</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="windows">
+<span id="5jG9a3"></span><h3>コード署名先の Windows アプリケーション<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<p>適当なアプリケーションがなければテスト用に以下のような感じで作っても良い</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="n">mingw</span><span class="o">-</span><span class="n">w64</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">&gt;</span> <span class="n">codesign</span><span class="o">.</span><span class="n">c</span> <span class="o">&lt;&lt;</span><span class="n">EOF</span>
+<span class="c1">#include &lt;stdio.h&gt;</span>
+<span class="c1">#include &lt;stdlib.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="n">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Hello, world!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">EOF</span>
+<span class="n">x86_64</span><span class="o">-</span><span class="n">w64</span><span class="o">-</span><span class="n">mingw32</span><span class="o">-</span><span class="n">gcc</span> <span class="o">-</span><span class="n">o</span> <span class="n">codesign</span><span class="o">.</span><span class="n">exe</span> <span class="n">codesign</span><span class="o">.</span><span class="n">c</span>
+</pre></div>
+</div>
+<p>署名</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">osslsigncode</span> \
+ <span class="o">-</span><span class="n">certs</span> <span class="s2">&quot;$cert&quot;</span>
+ <span class="o">-</span><span class="n">key</span> <span class="s2">&quot;$key_nopass&quot;</span>
+ <span class="o">-</span><span class="n">h</span> <span class="n">sha1</span>
+ <span class="o">-</span><span class="n">n</span> <span class="s2">&quot;this is malicious&quot;</span>
+ <span class="o">-</span><span class="n">i</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span>
+ <span class="o">-</span><span class="n">t</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">timestamp</span><span class="o">.</span><span class="n">verisign</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">timstamp</span><span class="o">.</span><span class="n">dll</span> <span class="n">a</span><span class="o">.</span><span class="n">exe</span>
+</pre></div>
+</div>
+<div class="section" id="k7Tog">
+<span id="id7"></span><h4>参考<a class="headerlink" href="#k7Tog" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>signcode \
+-spc authenticode.spc \
+-v authenticode.pvk \
+-a sha1 -$ commercial \
+-n My\ Application \
+-i http://www.example.com/ \
+-t http://timestamp.verisign.com/scripts/timstamp.dll \
+-tr 10 \
+MyApp.exe
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">signtool</span> <span class="n">sign</span> <span class="o">/</span><span class="n">f</span> <span class="n">HOGEHOGE</span><span class="o">.</span><span class="n">pfx</span>
+             <span class="o">/</span><span class="n">p</span> <span class="n">YOURPASSWORD</span>
+             <span class="o">/</span><span class="n">d</span> <span class="n">UACで表示される文字</span>
+             <span class="o">/</span><span class="n">t</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">xn</span><span class="o">--</span><span class="n">url</span><span class="o">-</span><span class="n">p83b0b3q3flf9azdc9rld2fxm8e8048ew61a</span>
+             <span class="n">EXEとかMSIとか</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><a class="reference external" href="http://timestamp.verisign.com/scripts/timstamp.dll">タイムスタンプサーバのURL</a></li>
+<li><a class="reference external" href="http://sha256timestamp.ws.symantec.com/sha256/timestamp">sha256のタイムスタンプは以下をご利用ください。（オプションは /t ではなく、 /tr を使います）</a></li>
+<li><a class="reference external" href="https://elleneast.com/?p=5315">個人でコードサイニング証明書を取得してみた</a></li>
+<li><a class="reference external" href="https://docs.microsoft.com/en-us/powershell/module/pkiclient/import-certificate?view=win10-ps">Import-Certificate</a></li>
+<li><a class="reference external" href="https://stackoverflow.com/questions/10937065/signtool-allows-me-to-sign-code-but-set-authenticodesignature-says-the-certific">Signtool allows me to sign code but Set-AuthenticodeSignature says the “certificate is not suitable for code signing”</a></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span>\<span class="o">&gt;</span><span class="n">signtool</span> <span class="n">sign</span> <span class="o">/</span><span class="n">v</span> <span class="o">/</span><span class="n">n</span> <span class="s2">&quot;VetWeb&quot;</span> <span class="n">SetupRDPPermissions</span><span class="o">.</span><span class="n">ps1</span>
+<span class="n">The</span> <span class="n">following</span> <span class="n">certificate</span> <span class="n">was</span> <span class="n">selected</span><span class="p">:</span>
+   <span class="n">Issued</span> <span class="n">to</span><span class="p">:</span> <span class="n">VetWeb</span>
+   <span class="n">Issued</span> <span class="n">by</span><span class="p">:</span> <span class="n">VetWeb</span> <span class="n">CA</span>
+   <span class="n">Expires</span><span class="p">:</span>   <span class="n">Sat</span> <span class="n">Dec</span> <span class="mi">31</span> <span class="mi">18</span><span class="p">:</span><span class="mi">59</span><span class="p">:</span><span class="mi">59</span> <span class="mi">2039</span>
+   <span class="n">SHA1</span> <span class="nb">hash</span><span class="p">:</span> <span class="mi">84136</span><span class="n">EBF8D2603C2CD6668C955F920C6C6482EE4</span>
+
+<span class="n">Done</span> <span class="n">Adding</span> <span class="n">Additional</span> <span class="n">Store</span>
+<span class="n">Successfully</span> <span class="n">signed</span><span class="p">:</span> <span class="n">SetupRDPPermissions</span><span class="o">.</span><span class="n">ps1</span>
+
+<span class="n">Number</span> <span class="n">of</span> <span class="n">files</span> <span class="n">successfully</span> <span class="n">Signed</span><span class="p">:</span> <span class="mi">1</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">warnings</span><span class="p">:</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="revoke">
+<span id="doAga"></span><h2>revoke<a class="headerlink" href="#revoke" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>CA -revoke &quot;$cert&quot; -passin file:$PASS
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="03.html" class="btn btn-neutral float-right" title="参考文献・メモ" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="01.html" class="btn btn-neutral" title="方針" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, mo.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
