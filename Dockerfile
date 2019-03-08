@@ -1,0 +1,14 @@
+FROM ubuntu
+LABEL maintainer="mo"
+RUN apt update ; apt install -y apt-utils ; \
+    apt install -y ca-certificates shunit2 openssl nginx curl tcpdump ;
+RUN apt install -y git python3 python3-pip ;\
+    pip3 install testresources ; \
+    pip3 install sphinx sphinx_rtd_theme commonmark  sphinxcontrib-actdiag sphinxcontrib-blockdiag sphinxcontrib-nwdiag sphinxcontrib-seqdiag reportlab recommonmark ; \
+# pdf 生成用。時間がかかるのでコメントにしておく
+# RUN apt install -y libterm-readline-perl-perl ; \
+#     echo "Asia/Tokyo" > /etc/timezone ; \
+#     ln -fs /usr/share/zoneinfo/`cat /etc/timezone` /etc/localtime ; \
+#     dpkg-reconfigure -f noninteractive tzdata ; \
+#     apt install -y tzdata ; \
+#     apt install -y texlive texlive-lang-cjk latexmk texlive-formats-extra

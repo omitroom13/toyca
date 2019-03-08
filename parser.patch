@@ -1,0 +1,29 @@
+--- /home/mo/.virtualenvs/p363/lib/python3.6/site-packages/recommonmark/parser.py	2017-12-23 22:43:49.637050390 +0900
++++ parser.py	2017-12-23 22:54:52.304357756 +0900
+@@ -105,11 +105,23 @@ class CommonMarkParser(parsers.Parser):
+         title_node.line = block.start_line
+         append_inlines(title_node, block.inline_content)
+         new_section.append(title_node)
+-        name = nodes.fully_normalize_name(title_node.astext())
++        #recommonmark/parse.py:CommonMarkParser.section で日本語を扱えるようにする
++        #fully_normalize_text() 日本語の見出しを引数にすると空文字を返してしまうので使用しない
++        name = title_node.astext()
+         new_section['names'].append(name)
+         self.current_node.document.note_implicit_target(new_section, new_section)
+-        new_section['ids'].append(nodes.make_id(name))
+-
++        #name を引数にした adler32 の返り値を [0-9a-zA-Z] で表現しものを #id にする
++        import zlib
++        import math
++        d =  [chr(i) for i in range(ord('0'), ord('9')+1)] \
++            +[chr(i) for i in range(ord('a'), ord('z')+1)] \
++            +[chr(i) for i in range(ord('A'), ord('Z')+1)]
++        l = len(d)
++        c = zlib.adler32(title_node.astext().encode())
++        i = "".join([d[math.floor(c/pow(l,p-1))%l] \
++                     for p in range(1, 1 + math.ceil(math.log(c,l)))])
++        new_section['ids'].append(i)
++        
+         self.section_handler.add_new_section(new_section, block.level)
+         self.current_node = new_section
+ 

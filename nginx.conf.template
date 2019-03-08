@@ -1,0 +1,145 @@
+# #1. 普通のSSLサーバ
+#  server_name www.example.com
+#  cert-im.1.pem(i/s)
+#   server-ca-2/www.example.com
+#   selfsign-ca-2/server-ca-2
+# #2. ワイルドカード(SAN)
+# ##cn の名前は変えたほうがいいのかな？ wildcard とか
+# ##cn とサーバ名は分ける
+#  server_name  www.example.co.jp
+#   #index 2番目
+#  cert-im.2.pem(i/s)
+#   server-ca-2/www.example.co.jp
+#   selfsign-ca-2/server-ca-2
+# #3. 日本語(punnycode)
+#  server_name xn--u0h9a3d.xn--eckwd4c7cu47r2wf.jp
+#  cert-im.3.pem server-ca-2 cn/
+#  cert-im.3.pem(i/s)
+#   server-ca-2/xn--u0h9a3d.xn--eckwd4c7cu47r2wf.jp
+#   selfsign-ca-2/server-ca-2
+# #4. クライアント認証
+#  server_name www.example.com
+#  cert-im.4.pem(i/s)
+#   server-ca-2/www.example.com
+#   selfsign-ca-2/server-ca-2
+#  cacert.pem selfsign-ca-2
+#  (client) client-ca-2 cn/john.doe
+# #5. クロスルート
+#  server_name www.example.com
+#  cert-im.5.pem(i/s)
+#   server-ca-2/www.example.com
+#   selfsign-ca-2/server-ca-2
+#   selfsign-ca-1/selfsign-ca-2
+#  (client) client-ca-2 cn/john.doe
+#  (client) client-ca-1 cn/john.doe
+# #6. クロスルート+クライアント認証
+#  server_name www.example.com
+#  cert-im.6.pem(i/s)
+#   server-ca-2/www.example.com
+#   selfsign-ca-2/server-ca-2
+#   selfsign-ca-1/selfsign-ca-2
+#  server_trust
+#   selfsign-ca-1
+#   selfsign-ca-2
+#  client_trust
+#   *selfsign-ca-1*
+#  (client) client-ca-2 cn/john.doe
+#  (client) client-ca-1 cn/john.doe
+server {
+       listen 80 default_server;
+       root /opt/toyca/doc/_build/html;
+       server_name _;
+       location / {
+       		try_files $uri $uri/ =404;
+       }      
+}
+server {
+       listen 1080;
+       listen 1443 ssl;
+       server_name _SERVERNAME1_;
+       root _WWW_;
+       ssl_certificate      _CERT1_/cert-im.pem;
+       ssl_certificate_key  _CERT1_/key-nopass.pem;
+       ssl_protocols TLSv1.1 TLSv1.2;
+       ssl_prefer_server_ciphers on;
+       ssl_ciphers 'kECDHE+aECDSA+AESGCM:ECDH+aRSA+AESGCM';
+       location / {
+       		try_files $uri $uri/ =404;
+       }
+}
+server {
+       listen 2080;
+       listen 2443 ssl;
+       server_name _SERVERNAME2_;
+       root _WWW_;
+       ssl_certificate      _CERT2_/cert-im.pem;
+       ssl_certificate_key  _CERT2_/key-nopass.pem;
+       ssl_protocols TLSv1.1 TLSv1.2;
+       ssl_prefer_server_ciphers on;
+       ssl_ciphers 'kECDHE+aECDSA+AESGCM:ECDH+aRSA+AESGCM';
+       location / {
+       		try_files $uri $uri/ =404;
+       }
+}
+server {
+       listen 3080;
+       listen 3443 ssl;
+       server_name _SERVERNAME3_;
+       root _WWW_;
+       ssl_certificate      _CERT3_/cert-im.pem;
+       ssl_certificate_key  _CERT3_/key-nopass.pem;
+       ssl_protocols TLSv1.1 TLSv1.2;
+       ssl_prefer_server_ciphers on;
+       ssl_ciphers 'kECDHE+aECDSA+AESGCM:ECDH+aRSA+AESGCM';
+       location / {
+       		try_files $uri $uri/ =404;
+       }
+}
+server {
+       listen 4080;
+       listen 4443 ssl;
+       server_name _SERVERNAME4_;
+       root _WWW_;
+       ssl_certificate      _CERT4_/cert-im.pem;
+       ssl_certificate_key  _CERT4_/key-nopass.pem;
+       ssl_protocols TLSv1.1 TLSv1.2;
+       ssl_prefer_server_ciphers on;
+       ssl_ciphers 'kECDHE+aECDSA+AESGCM:ECDH+aRSA+AESGCM';
+       location / {
+       		try_files $uri $uri/ =404;
+       }
+}
+server {
+       #クロスルートを使えていない疑惑
+       listen 5080;
+       listen 5443 ssl;
+       server_name _SERVERNAME5_;
+       root _WWW_;
+       ssl_certificate      _CERT5_/cert-im-cross.pem;
+       ssl_certificate_key  _CERT5_/key-nopass.pem;
+       ssl_protocols TLSv1.1 TLSv1.2;
+       ssl_prefer_server_ciphers on;
+       ssl_ciphers 'kECDHE+aECDSA+AESGCM:ECDH+aRSA+AESGCM';
+       location / {
+       		try_files $uri $uri/ =404;
+       }
+}
+server {
+       #クロスルートを使えていない疑惑
+       listen 6080;
+       listen 6443 ssl;
+       server_name _SERVERNAME6_;
+       root _WWW_;
+       ssl_certificate      _CERT6_/cert-im.pem;
+       ssl_certificate_key  _CERT6_/key-nopass.pem;
+       ssl_protocols TLSv1.1 TLSv1.2;
+       ssl_prefer_server_ciphers on;
+       ssl_ciphers 'kECDHE+aECDSA+AESGCM:ECDH+aRSA+AESGCM';
+       ssl_verify_client on;
+       ssl_verify_depth 2;
+       ssl_client_certificate _CERT6CLIENT_/cacert.pem;
+       ssl_trusted_certificate _CERT6TRUSTED_/cacert-cross.pem;
+       location / {
+       		try_files $uri $uri/ =404;
+       }
+}

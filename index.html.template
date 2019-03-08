@@ -1,0 +1,12 @@
+<html>
+  <body>
+    <ul>
+      <li>normal    <a href="https://_SERVERNAME1_:1443/">https://_SERVERNAME1_:1443</a></li>
+      <li>wildcard  <a href="https://_SERVERNAME2_:2443/">https://_SERVERNAME2_:2443</a></li>
+      <li>punycode1 <a href="https://_SERVERNAME3_:3443/">https://_SERVERDISP3_:3443</a></li>
+      <li>日本語CN  <a href="https://_SERVERNAME4_:4443/">https://_SERVERDISP4_:4443/</a></li>
+      <li>xroot     <a href="https://_SERVERNAME5_:5443/">https://_SERVERNAME5_:5443/</a></li>
+      <li>client    <a href="https://_SERVERNAME6_:6443/">https://_SERVERNAME6_:6443/</a></li>
+    </ul>
+  </body>
+</html>
