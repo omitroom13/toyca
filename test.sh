@@ -111,13 +111,13 @@ tearDown(){
     #rm -f /tmp/$$-*.pem
     echo "------------------------------------------------------"
 }
-NotestCreate() {
+testCreate() {
     clean
     assertEquals 0 $?
     create_both
     assertEquals 0 $?
 }
-NotestVerifyServer(){
+testVerifyServer(){
     :<<EOF
 証明書 $server_cert を $server_trust を信頼するCA証明書のリポジトリとして検証する
 CApath では crl も探す。というか、-crlfile というオプションが man にはあるが、コマンドで指定するとエラーになるので CAfile に含めるしかない。順番は問われないようだ
@@ -133,7 +133,7 @@ EOF
     openssl verify -CAfile $server_trust -crl_check_all -purpose sslserver -issuer_checks -verbose $server_cert | tee >(grep ^error | wc -l > $result)
     assertEquals 0 $(cat $result)
 }
-NotestVerifyCrossRoot(){
+testVerifyCrossRoot(){
     :<<EOF
 クロスルート証明書(OldWithNew, NewWithOld)を検証する。
 比較のために通常の証明書(NewWithNew, OldWithOld)も検証する
@@ -181,7 +181,7 @@ EOF
 
     rm -f /tmp/$$-*
 }
-NotestConnect(){
+testConnect(){
     #中間認証局証明書をサーバ証明書に入れる
     local cn="ca.example.com"
     local result="/tmp/$$-result.log"
@@ -201,7 +201,7 @@ NotestConnect(){
     # 停止している？
     # kill $pid
 }
-NotestConnectCrossroot(){
+testConnectCrossroot(){
     local cn="ca.example.com"
     local result="/tmp/$$-result.log"
     local server_trust="/tmp/$$-server.pem"
@@ -229,7 +229,7 @@ NotestConnectCrossroot(){
     assertEquals 0 $(cat $result)
     # kill $pid
 }
-NotestConnectClientAuth(){
+testConnectClientAuth(){
     #クライアント証明書有無
     local cn="ca.example.com"
     local result="/tmp/$$-result.log"
@@ -253,7 +253,7 @@ NotestConnectClientAuth(){
     assertEquals 0 $(cat $result)
     #kill $pid
 }
-NotestConnectCrossRootClientAuth(){
+testConnectCrossRootClientAuth(){
     #クライアント証明書有無
     local cn="ca.example.com"
     local result="/tmp/$$-result.log"
@@ -300,7 +300,7 @@ NotestConnectCrossRootClientAuth(){
     assertEquals 0 $(cat $result)
     # kill $pid
 }
-NotestNginx() {
+testNginx() {
     local cn="ca.example.com"
     local id=`grep "/CN=${cn}" ca/server-ca-1/index.txt | cut -f 4 | head -n 1`
     local _WWW_="$(pwd)/www"
