@@ -273,7 +273,7 @@ EOF
     s@_SERVERNAME6_@ca.example.com@g;
 " index.html.template > www/index.html
     sed -e "
-    s@_WWW_@/var/www/html@g;
+    s@_WWW_@/usr/share/nginx/html@g;
     s@_SERVERNAME1_@ca.example.com@g;
     s@_CERT1_@$path/server-ca-2/certs/ca.example.com@g;
 
@@ -293,7 +293,7 @@ EOF
     s@_CERT6_@$path/server-ca-2/certs/ca.example.com@g;
     s@_CERT6CLIENT_@$path/client-ca-1@g;
     s@_CERT6TRUSTED_@$path/selfsign-ca-1@g;
-" nginx.conf.template > nginx.conf
+" nginx.conf.template > www/nginx.conf
 }
 
 clean(){

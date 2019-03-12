@@ -46,14 +46,6 @@
 #  (client) client-ca-2 cn/john.doe
 #  (client) client-ca-1 cn/john.doe
 server {
-       listen 80 default_server;
-       root /opt/toyca/doc/_build/html;
-       server_name _;
-       location / {
-       		try_files $uri $uri/ =404;
-       }      
-}
-server {
        listen 1080;
        listen 1443 ssl;
        server_name _SERVERNAME1_;

@@ -1,21 +1,22 @@
 version: '2.2'
 services:
-  ca:
-    image: toyca
-    tty: true
-    init: true
+  www:
+    image: nginx
     volumes:
-      - ".:/opt/toyca"
-      - "./start.sh:/usr/local/bin/start.sh"
-      - "./nginx.conf:/etc/nginx/sites-available/ca"
+      - "./www:/usr/share/nginx/html"
+      - "./www/nginx.conf:/etc/nginx/conf.d/toyca.conf"
+      - "./ca:/etc/ssl/toyca"
     ports:
-      - "127.0.0.1:80:80"
-      - "127.0.0.1:1080:1080"
       - "127.0.0.1:1443:1443"
       - "127.0.0.1:2443:2443"
       - "127.0.0.1:3443:3443"
       - "127.0.0.1:4443:4443"
       - "127.0.0.1:5443:5443"
       - "127.0.0.1:6443:6443"
-    command: /usr/local/bin/start.sh
+      - "127.0.0.1:7443:7443"
     hostname: ca.example.com
+  proxy:
+    image: squid
+    volumes:
+      - "./www/squid.conf:/etc/squid/squid.conf"
+    hostname: proxy.example.com

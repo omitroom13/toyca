@@ -11,6 +11,7 @@
 ### 諸々生成
 
 ```
+docker pull library/nginx
 git clone https://github.com/omitroom13/toyca
 cd toyca
 ```
@@ -37,6 +38,23 @@ popd
 ./test.sh
 ```
 
+テスト用 Web サイト(www.example.comなど)の起動
+
+```
+./ca.sh gen_nginx_conf
+```
+
+```
+./Dockerfile.sh run
+```
+
+```eval_rst
+.. todo::
+	エラーチェック
+	- v オプションで指定した先にファイルが存在するか
+	- p オプションで開放したポートにアクセスできるか
+```
+
 ### ホストの設定
 
 #### 認証局証明書
@@ -54,15 +72,18 @@ sudo update-ca-certificates
 
 ```
 sudo apt install libnss3-tools
+```
 
-# CA file to install (CUSTOMIZE!)
+各 CA のルート証明書をインストールする
+
+```
 install_cacert(){
  method=$1
  certdir=$2
  for cacert in $(ls ca/selfsign-ca-*/cacert.pem)
  do
   name=$(echo $cacert | sed -e 's@^ca/@@; s@/cacert.pem$@@;')
-  certutil -A -n "${name}" -t "TCu,Cu,Tu" -i ${cacert} -d ${method}:${certdir}
+  certutil -A -n "${name}" -t "TC,C,T" -i ${cacert} -d ${method}:${certdir}
  done
 }
 
@@ -80,9 +101,6 @@ do
  install_cacert sql $certdir
 done
 ```
-
-> Notice: Trust flag u is set automatically if the private key is present.
-これなんだっけ?
 
 chrome なら chrome://settings/certificates の認証局 org-ToyCA でインストールされたことを確認できる。
 
