@@ -1,0 +1,32 @@
+version: '2.2'
+services:
+  www:
+    image: nginx
+    volumes:
+      - "$PWD/www:/usr/share/nginx/html"
+      - "$PWD/www/nginx.conf:/etc/nginx/conf.d/toyca.conf"
+      - "$PWD/ca:/etc/ssl/toyca"
+    ports:
+      - "127.0.0.1:1443:1443"
+      - "127.0.0.1:2443:2443"
+      - "127.0.0.1:3443:3443"
+      - "127.0.0.1:4443:4443"
+      - "127.0.0.1:5443:5443"
+      - "127.0.0.1:6443:6443"
+      - "127.0.0.1:7443:7443"
+      - "127.0.0.1:8443:8443"
+    hostname: ca.example.com
+  proxy:
+    image: squid-bump
+    ports:
+      - "127.0.0.1:3128:3128"
+    hostname: proxy.example.com
+  openssl:
+    image: openssl-tls1_3
+    tty: true
+    volumes:
+      - "$PWD:/opt/toyca"
+    hostname: openssl.example.com
+    links:
+      - www:ca.example.com
+      - proxy:proxy.example.com

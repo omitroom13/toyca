@@ -12,7 +12,12 @@ GMT のタイムスタンプを出すためにTZで修正する
 EOF
     local base=$1
     tz=`date "+%:::z" | tr '\-+' '+-'`
-    date -u -d "$base $tz hours" '+%Y%m%d%H%M%SZ'
+    if [ -z "$tz" ]
+    then
+	date -u '+%Y%m%d%H%M%SZ'
+    else
+	date -u -d "$base $tz hours" '+%Y%m%d%H%M%SZ'
+    fi
 }
 
 lifetime(){
@@ -73,23 +78,19 @@ EOF
 genpkey(){
     :<<EOF
 openssl genpkey を呼び出す
-genpkey $key $pass $enc $alg $opt
+genpkey $key $alg $opt
 key=./ca/server-ca-1/certs/www.example.com/key.pem
 pass=./pass.txt
 enc=aes256
 alg=rsa
-genpkey "$key" "$key_nopass" "$pass" "$enc" rsa rsa_keygen_bits:2048
-genpkey "$key" "$key_nopass" "$pass" "$enc" ec ec_paramgen_curve:secp384r1 ec_param_enc:named_curve
-? genpkey "$key" "$key_nopass" "$pass" "$enc" ec ec_paramgen_curve:P-256 ec_param_enc:named_curve
-? genpkey "$key" "$key_nopass" "$pass" "$enc" ec ec_paramgen_curve:prime256v1 ec_param_enc:named_curve
+genpkey "$key" rsa rsa_keygen_bits:2048
+genpkey "$key" ec ec_paramgen_curve:secp384r1 ec_param_enc:named_curve
+? genpkey "$key" ec ec_paramgen_curve:P-256 ec_param_enc:named_curve
+? genpkey "$key" ec ec_paramgen_curve:prime256v1 ec_param_enc:named_curve
+? genpkey "$key" X25519
+
 EOF
     local key=$1
-    shift
-    local key_nopass=$1
-    shift
-    local pass=$1
-    shift
-    local enc=$1
     shift
     local alg=$1
     shift
@@ -98,8 +99,28 @@ EOF
     do
 	pkeyopt=" $pkeyopt -pkeyopt $opt"
     done
-    openssl genpkey -out "$key" -pass file:"$pass" -"$enc" -algorithm "$alg" $pkeyopt
-    openssl pkey -in "$key" -out "$key_nopass" -passin file:"$pass"
+    openssl genpkey -out "$key" -algorithm "$alg" $pkeyopt
+    if [ ! $? ]
+    then
+	echo ng openssl genpkey -out "$key" -algorithm "$alg" $pkeyopt
+	return 1
+    fi
+    if [ "$alg" == "rsa" ]
+    then
+	#[OpenSSL/genpkey - NORK's "HOW TO..." Wiki 略して「のうはうWiki」](https://wiki.ninth-nine.com/OpenSSL/genpkey)
+	#> 実運用で必要だと思ったことは無いが、世の中には秘密鍵を暗号化しないといけないユースケースがあるようで、その場合の指定方法について調査した。
+	#> 結論から言えば、ＲＳＡでのみ指定できる。ＥＣＤＳＡでは指定できない。未検証だがＥｄＤＳＡも指定できないと思う。
+	#rsa のときのみ、enc- と付けて aes256 決め打ちで暗号化しておく。パスワードファイル決め打ち?
+	b=$(basename $key)
+	echo openssl pkey -in "$key" -out $(echo $key | sed -e "s/$b/enc-$b/") -aes256 -passout file:./pass.txt
+	openssl pkey -in "$key" -out $(echo $key | sed -e "s/$b/enc-$b/") -aes256 -passout file:./pass.txt
+	if [ ! $? ]
+	then
+	    # echo ng openssl pkey -in "$key" -out $(echo $f | sed -e "s/$b/enc-$b/") -aes256 -passin file:"./pass.txt"
+	    return 1
+	fi
+    fi
+    return 0
 }
 
 if [ "$0" = "-bash" ]

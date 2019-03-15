@@ -16,9 +16,18 @@ git clone https://github.com/omitroom13/toyca
 cd toyca
 ```
 
+```
+sudo chown -R $(id -u):$(id -g) .
+docker build -f Dockerfile/squid -t squid-bump .
+docker build -f Dockerfile/openssl -t openssl-tls1_3 .
+docker build -f Dockerfile/sphinx -t sphinx .
+```
+
 ドキュメント生成。 Sphinx が必要
 
 ```
+docker run -it -v $(pwd):/opt/toyca sphinx
+
 pushd doc
 mkdir _static
 make html
@@ -28,13 +37,23 @@ popd
 デモ用CAの生成
 
 ```
+docker run -it -v $(pwd):/opt/toyca openssl-tls1_3
+
 ./ca.sh clean
 ./ca.sh create_both
-```
+
+sudo chown -R $(id -u):$(id -
+
+
+PKEY_ALG=
+PKEY_PALAM="ec_paramgen_curve:P-256 ec_param_enc:named_curve"
+
 
 単体テスト
 
 ```
+docker-compose -f ./Dockerfile/docker-compose.yml up
+
 ./test.sh
 ```
 
@@ -127,3 +146,10 @@ docker-compose up -d
   - http://localhost/
 - デモ用ウェブサーバ
   - http://localhost/
+
+
+### alpine の date ェ
+
+gnu の date と busybox の date は違う。オフセット使うとわかる
+
+[date コマンドつらい - bearmini's blog](https://bearmini.hatenablog.com/entry/2017/06/19/115255)
