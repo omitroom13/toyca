@@ -30,3 +30,21 @@ services:
     links:
       - www:ca.example.com
       - proxy:proxy.example.com
+  ocsp:
+    image: mattbodholdt/openca-ocspd
+    volumes:
+      - "$PWD/ca/server-ca-1/certs/ocsp.example.com/cert.pem:/data/ocspd/ocspd.crt"
+      - "$PWD/ca/server-ca-1/certs/ocsp.example.com/key.pem:/data/ocspd/ocspd.key"
+      - "$PWD/ca/server-ca-1/cacert.pem:/data/ocspd/ca.crt"
+      - "$PWD/www/server-ca-1.crl:/data/ocspd/crl.crl"
+    ports:
+      - "127.0.0.1:2560:2560"
+    hostname: ocsp.example.com
+  caddy:
+    image: abiosoft/caddy
+    volumes:
+      - $PWD/ca:/etc/ssl/toyca
+      - $PWD/Caddyfile:/etc/Caddyfile
+    ports:
+      - "127.0.0.1:2015:2015"
+    hostname: caddy.example.com

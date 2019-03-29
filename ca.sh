@@ -355,6 +355,22 @@ then
 	    export SAN=$san
 	    generate_certificate server $start $end "$cn" "$dn" "$alg" "$param"
 	    ;;
+	gen_cert_ocsp)
+	    #細かい設定抜きでサーバ証明書を生成したいとき
+	    #ca : 認証局名(server-ca-1 など)
+	    #cn : サーバ名(またはIPアドレス)
+	    ca=$1
+	    cn=$2
+	    san=$3
+	    alg=$4
+	    param=$5
+	    dn="/CN=${cn}"
+	    set_ca $ca
+	    start=$(lifetime '+%Y/%m/01' "-1 years 0 months")
+	    end=$(lifetime '+%Y/%m/01' "1 years 0 months")
+	    export SAN=$san
+	    generate_certificate ocsp $start $end "$cn" "$dn" "$alg" "$param"
+	    ;;
 	gen_nginx_conf)
 	    gen_nginx_conf
 	    ;;

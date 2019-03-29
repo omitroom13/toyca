@@ -129,6 +129,13 @@ crlDistributionPoints  = URI:http://$CRLAIA/$CANAME.crl
 #EV SSL
 #policyConstraints     =
 
+[ ext_ocsp ]
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints       = CA:FALSE
+keyUsage               = nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage       = OCSPSigning
+
 [ ext_client_ms ]
 #以下のエクステンションがMSのクライアント証明書特有かもしれないが、おそらくいらない。
 MS_CERTIFICATE_TEMPLATE       = DER:302E06262B060104018237150885F88F1C86FED61787A98F0986F48C1F81D38F094B87B49405839DA83502016402010D

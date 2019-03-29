@@ -12,6 +12,8 @@
 
 ```
 docker pull library/nginx
+docker pull abiosoft/caddy
+docker pull mattbodholdt/openca-ocspd
 git clone https://github.com/omitroom13/toyca
 cd toyca
 ```
@@ -21,6 +23,17 @@ sudo chown -R $(id -u):$(id -g) .
 docker build -f Dockerfile/squid -t squid-bump .
 docker build -f Dockerfile/openssl -t openssl-tls1_3 .
 docker build -f Dockerfile/sphinx -t sphinx .
+
+ca="server-ca-1"
+cn="ocsp.example.com"
+san="DNS:${cn}"
+./ca.sh gen_cert_ocsp "$ca" "$cn" "$san" "rsa" "rsa_keygen_bits:2048"
+
+ca="server-ca-1"
+cn="caddy.example.com"
+san="DNS:${cn}"
+./ca.sh gen_cert_server "$ca" "$cn" "$san" "rsa" "rsa_keygen_bits:2048"
+
 ```
 
 ドキュメント生成。 Sphinx が必要
@@ -139,7 +152,7 @@ hosts ファイルに以下を加える
 
 ```
 docker build -t toyca .
-docker-compose up -d
+docker-compose up -d -f Dockerfile/docker-compose.yml
 ```
 
 - ドキュメント

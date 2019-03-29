@@ -1,0 +1,4 @@
+0.0.0.0
+browse
+server_name caddy.example.com;
+tls /etc/ssl/toyca/server-ca-1/certs/caddy.example.com/cert-im.pem /etc/ssl/toyca/server-ca-1/certs/caddy.example.com/key.pem
