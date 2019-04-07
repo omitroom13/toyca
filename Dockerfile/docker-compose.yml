@@ -1,11 +1,12 @@
 version: '2.2'
 services:
   www:
-    image: nginx
+    image: nginx:alpine
+#    image: nginx
     volumes:
-      - "$PWD/www:/usr/share/nginx/html"
-      - "$PWD/www/nginx.conf:/etc/nginx/conf.d/toyca.conf"
-      - "$PWD/ca:/etc/ssl/toyca"
+      - "../www:/usr/share/nginx/html"
+      - "../www/nginx.conf:/etc/nginx/conf.d/toyca.conf"
+      - "../ca:/etc/ssl/toyca"
     ports:
       - "127.0.0.1:1443:1443"
       - "127.0.0.1:2443:2443"
@@ -15,6 +16,7 @@ services:
       - "127.0.0.1:6443:6443"
       - "127.0.0.1:7443:7443"
       - "127.0.0.1:8443:8443"
+      - "127.0.0.1:8445:8445"
     hostname: ca.example.com
   proxy:
     image: squid-bump
@@ -25,7 +27,7 @@ services:
     image: openssl-tls1_3
     tty: true
     volumes:
-      - "$PWD:/opt/toyca"
+      - "..:/opt/toyca"
     hostname: openssl.example.com
     links:
       - www:ca.example.com
@@ -33,18 +35,28 @@ services:
   ocsp:
     image: mattbodholdt/openca-ocspd
     volumes:
-      - "$PWD/ca/server-ca-1/certs/ocsp.example.com/cert.pem:/data/ocspd/ocspd.crt"
-      - "$PWD/ca/server-ca-1/certs/ocsp.example.com/key.pem:/data/ocspd/ocspd.key"
-      - "$PWD/ca/server-ca-1/cacert.pem:/data/ocspd/ca.crt"
-      - "$PWD/www/server-ca-1.crl:/data/ocspd/crl.crl"
+      - "../ca/server-ca-1/certs/ocsp.example.com/cert.pem:/data/ocspd/ocspd.crt"
+      - "../ca/server-ca-1/certs/ocsp.example.com/key.pem:/data/ocspd/ocspd.key"
+      - "../ca/server-ca-1/cacert.pem:/data/ocspd/ca.crt"
+      - "../www/server-ca-1.crl:/data/ocspd/crl.crl"
     ports:
       - "127.0.0.1:2560:2560"
     hostname: ocsp.example.com
   caddy:
     image: abiosoft/caddy
     volumes:
-      - $PWD/ca:/etc/ssl/toyca
-      - $PWD/Caddyfile:/etc/Caddyfile
+      - "../Caddyfile:/etc/Caddyfile"
+      - "../ca:/etc/ssl/toyca"
     ports:
       - "127.0.0.1:2015:2015"
+      - "127.0.0.1:8444:8444"
+      - "127.0.0.1:8444:8444/udp"
+      # - "127.0.0.1:8445:8445"
+      # - "127.0.0.1:8445:8445/udp"
     hostname: caddy.example.com
+    command:
+      - --conf
+      - /etc/Caddyfile
+      - --log
+      - stdout
+      - -quic

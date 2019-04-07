@@ -337,10 +337,10 @@ EOF
     # 	gen_cert_client_yubikey $START_EE $END_EE $cn "$dn" "" ""
     # fi
     set_ca client-ca $N    
-    cn="x25519.example.com"
+    cn="ec.ed25519.example.com"
     dn="/CN=$cn"
     export SAN="DNS:${cn}"
-    generate_certificate "server" $START_EE $END_EE "$cn" "$dn" "x25519" ""
+    generate_certificate "server" $START_EE $END_EE "$cn" "$dn" "ed25519" ""
     set_ca client-ca $N    
 
     cn="ec.P-256.example.com"

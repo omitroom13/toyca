@@ -87,7 +87,7 @@ genpkey "$key" rsa rsa_keygen_bits:2048
 genpkey "$key" ec ec_paramgen_curve:secp384r1 ec_param_enc:named_curve
 ? genpkey "$key" ec ec_paramgen_curve:P-256 ec_param_enc:named_curve
 ? genpkey "$key" ec ec_paramgen_curve:prime256v1 ec_param_enc:named_curve
-? genpkey "$key" X25519
+? genpkey "$key" ED25519
 
 EOF
     local key=$1
@@ -121,6 +121,35 @@ EOF
 	fi
     fi
     return 0
+}
+
+verify_certificate_and_key(){
+    :<<EOF
+cert.pem と key.pem が対になっているかどうかを確認する
+EOF
+    local cert_file=$1
+    local key_file=$2
+    local key_sha256=$(openssl pkey -in $key_file -pubout -outform pem | sha256sum)
+    local cert_sha256=$(openssl x509 -in $cert_file -pubkey -noout -outform pem | sha256sum)
+    diff <(echo $cert_sha256) <(echo $key_sha256)
+}
+is-edwards-enabled-in-client-hello(){
+    :<<EOF
+    TLS セッションをキャプチャした .pcap ファイル中に、CLIENT HELLO の sig_hash_alg で ed25519 または ed488 を有効にしたパケットが含まれる場合 0 を返す
+    is-edwards-enabled-in-client-hello .pcap
+EOF
+    local CLIENT_HELLO=1
+    local ED25515=0x0807
+    local ED488=0x0808
+    local pcap=$1
+    local QUERY="\
+        ssl.handshake.type == $CLIENT_HELLO \
+        and ssl.handshake.sig_hash_alg == $ED25515 \
+        and ssl.handshake.sig_hash_alg == $ED488"
+    [ $(tshark -r $pcap "$QUERY" | wc | awk '{print $1}') == 0 ]
+    local packets=$?
+    echo $packets
+    return $packets
 }
 
 if [ "$0" = "-bash" ]
