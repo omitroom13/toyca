@@ -86,7 +86,7 @@ EOF
 
 newcert() {
     :<<EOF
-これ obsolete, gen_new_cert に移行ずみでよい?
+これ obsolete, generate_certificate に移行ずみでよい?
 EOF
     echo "newcert: expected to be obsoleted(but executed)!"
     exit 1
@@ -101,10 +101,16 @@ EOF
 
 newca() {
     :<<EOF
-    新規CAを作る
+    新規 root CAを作る. 中間の場合は generate_certificate を使う
 EOF
     echo "newca"
-    init_ca_param $1 $2 $3 $4 $5 $6
+    # START=$1
+    # END=$2
+    # CN=$3
+    # DN=$4
+    # PKEY_ALG=$5
+    # PKEY_PARAM=$6
+    init_ca_param $START $END $CN $DN $PKEY_ALG $PKEY_PARAM
     CERT=$7
     KEY=$8
     if [ -e ${CATOP} ]; then
@@ -371,8 +377,41 @@ then
 	    export SAN=$san
 	    generate_certificate ocsp $start $end "$cn" "$dn" "$alg" "$param"
 	    ;;
+	gen_cert_ca)
+	    #細かい設定抜きで中間認証局を生成したいとき
+	    #ca : 認証局名(server-ca-1 など)
+	    #cn : CA名
+	    ca=$1
+	    cn=$2
+	    san=$3
+	    alg=$4
+	    param=$5
+	    dn=$6
+	    if [[ -z "$dn" ]]; then dn="/CN=${cn}" ; fi
+	    set_ca $ca
+	    start=$(lifetime '+%Y/%m/01' "-1 years 0 months")
+	    end=$(lifetime '+%Y/%m/01' "1 years 0 months")
+	    export SAN=$san
+	    generate_certificate ca $start $end "$cn" "$dn" "$alg" "$param"
+	    ;;
 	gen_nginx_conf)
 	    gen_nginx_conf
+	    ;;
+	revoke)
+	    ca=$1
+	    dn=$2
+	    export SAN=""
+	    cn=$(echo "$dn" | sed -e 's@.*CN=\(.*\)$@\1@')
+	    set_ca $ca
+	    init_ca_param "" "" "$cn" "$dn" "" "" ""
+	    serial=$(grep "$dn" $CATOP/index.txt | awk '{print $3}')
+	    cert="$CATOP/certs/$serial-$cn/cert.pem"
+	    if [[ -n $serial && -e $cert ]]
+	    then
+		$CA -revoke $cert
+	    else
+		echo "$dn, /CN=$cn or $cert not found in $ca"
+	    fi
 	    ;;
 	*)
 	    echo "Unknown arg $i" >&2

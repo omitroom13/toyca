@@ -17,6 +17,12 @@ type=ca ca.cnf の ext_ca セクションを使用して中間CA証明書を生�
 EOF
     local type=$1
     shift
+    # START=$1
+    # END=$2
+    # CN=$3
+    # DN=$4
+    # PKEY_ALG=$5
+    # PKEY_PARAM=$6
     init_ca_param "$1" "$2" "$3" "$4" "$5" "$6"
     if [ `echo $TOP | grep $(pwd)` ]
     then
@@ -48,7 +54,12 @@ EOF
 	    NAME_POLICY_EXTENSIONS="-name ca_any -policy policy_any -extensions ext_client"
     	;;
     	"ca")
-	    NAME_POLICY_EXTENSIONS="-name ca_any -extensions ext_enterprise"
+	    if [[ $CANAME =~ ^choroi-ca ]]
+	    then
+		NAME_POLICY_EXTENSIONS="-name ca_any -policy policy_choroi -extensions ext_enterprise"
+	    else
+		NAME_POLICY_EXTENSIONS="-name ca_any -extensions ext_enterprise"
+	    fi
     	;;
     	"ocsp")
 	    NAME_POLICY_EXTENSIONS="-name ca_any -policy policy_any -extensions ext_ocsp"
@@ -278,25 +289,21 @@ EOF
     set_ca selfsign-ca $N
     cn="enterprise-ca-$N"
     dn="/O=ToyCA/CN=$cn"
-    #gen_cert_ca $START_CA $END_CA "$cn" "$dn" "rsa" "rsa_keygen_bits:2048"
     generate_certificate "ca" $START_CA $END_CA "$cn" "$dn" "rsa" "rsa_keygen_bits:2048"
 
     cn="proxy-ca-$N"
     dn="/O=ToyCA/CN=$cn"
-    #gen_cert_ca $START_CA $END_CA "$cn" "$dn" "rsa" "rsa_keygen_bits:2048"
     generate_certificate "ca" $START_CA $END_CA "$cn" "$dn" "rsa" "rsa_keygen_bits:2048"
     
     set_ca server-ca $N
     cn="ca.example.com"
     dn="/CN=$cn"
     export SAN="DNS:${cn}, DNS:ns.example.com, DNS:ca.example.com, DNS:mail.example.com"
-    # gen_cert_server $START_EE $END_EE "$cn" "$dn" "rsa" "rsa_keygen_bits:2048"
     generate_certificate "server" $START_EE $END_EE "$cn" "$dn" "rsa" "rsa_keygen_bits:2048"
 
     cn="wildcard.example.com"
     dn="/CN=$cn"
     export SAN="DNS:${cn}, DNS:*.example.org, DNS:*.example.co.jp"
-    # gen_cert_server $START_EE $END_EE "$cn" "$dn" "rsa" "rsa_keygen_bits:2048"
     generate_certificate "server" $START_EE $END_EE "$cn" "$dn" "rsa" "rsa_keygen_bits:2048"
 
     #punycode 
@@ -306,7 +313,6 @@ EOF
     #○△□.ドメイン名例.jp, ●▲■.ドメイン名例.jp
     export SAN="DNS:${cn}, DNS:xn--t0h9a4e.xn--eckwd4c7cu47r2wf.jp"
     #これ START/END_EE でない?
-    # gen_cert_server $START_EE $END_EE "$cn" "$dn" "rsa" "rsa_keygen_bits:2048"
     generate_certificate "server" $START_EE $END_EE "$cn" "$dn" "rsa" "rsa_keygen_bits:2048"
     #AA
     #●▲■.ドメイン名例.jp
@@ -315,7 +321,6 @@ EOF
 なんか
 できるの"
     export SAN="DNS:*.example.com"
-    # gen_cert_server $START_EE $END_EE "$cn" "$dn" "rsa" "rsa_keygen_bits:2048"
     generate_certificate "server" $START_EE $END_EE "$cn" "$dn" "rsa" "rsa_keygen_bits:2048"
     #Firefox で日本語ドメインの .com / .net が punycode で表示される理由
     #http://futuremix.org/2010/03/firefox-displays-idn-com-net-domain-with-punycode
@@ -324,7 +329,6 @@ EOF
     cn="john.doe"
     dn="/CN=$cn"
     export SAN="email:${cn}@example.com, otherName:msUPN;UTF8:${cn}@example.com"
-    # gen_cert_client $START_EE $END_EE $cn "$dn" "rsa" "rsa_keygen_bits:2048"
     generate_certificate "client" $START_EE $END_EE $cn "$dn" "rsa" "rsa_keygen_bits:2048"
     
     set_ca client-ca $N    
