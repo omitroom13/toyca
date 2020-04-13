@@ -104,12 +104,12 @@ newca() {
     新規 root CAを作る. 中間の場合は generate_certificate を使う
 EOF
     echo "newca"
-    # START=$1
-    # END=$2
-    # CN=$3
-    # DN=$4
-    # PKEY_ALG=$5
-    # PKEY_PARAM=$6
+    START=$1
+    END=$2
+    CN=$3
+    DN=$4
+    PKEY_ALG=$5
+    PKEY_PARAM=$6
     init_ca_param $START $END $CN $DN $PKEY_ALG $PKEY_PARAM
     CERT=$7
     KEY=$8
