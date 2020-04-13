@@ -10,10 +10,10 @@ EOF
     local cn=$2
     local type=$3
     case $caname in
-	"server-ca-1" | "server-ca-2" | "client-ca-1" | "client-ca-2")
-	    local id=`grep "/CN=${cn}" ca/${caname}/index.txt | cut -f 4 | head -n 1`
-	    cn="${id}-${cn}"
-	;;
+        "server-ca-1" | "server-ca-2" | "client-ca-1" | "client-ca-2")
+            local id=`grep "/CN=${cn}" ca/${caname}/index.txt | cut -f 4 | head -n 1`
+            cn="${id}-${cn}"
+        ;;
     esac
     echo "$(pwd)/ca/$caname/certs/${cn}/${type}.pem"
 }
@@ -24,30 +24,30 @@ EOF
     local caname=$1
     local type=$2
     case "$type" in
-	"cacert")
-	    openssl x509 -outform PEM -in $(pwd)/ca/$caname/$type.pem
-	    ;;
-	"crl")
-	    openssl crl  -outform PEM -in $(pwd)/ca/$caname/$type.pem
-	    ;;
-	"crossroot")
-	    case "$caname" in
-		"selfsign-ca-1")
-		    openssl x509 -outform PEM -in "$(pwd)/ca/$caname/certs/selfsign-ca-2/cert.pem"
-		    ;;
-		"selfsign-ca-2")
-		    openssl x509 -outform PEM -in "$(pwd)/ca/$caname/certs/selfsign-ca-1/cert.pem"
-		    ;;
-		*)
-		    echo "ca_pem:unknown ca:$caname" >&2
-		    return 1
-		    ;;
-	    esac
-	    ;;
-	*)
-	    echo "ca_pem:unknown type:$type" >&2
-	    return 1
-	    ;;
+        "cacert")
+            openssl x509 -outform PEM -in $(pwd)/ca/$caname/$type.pem
+            ;;
+        "crl")
+            openssl crl  -outform PEM -in $(pwd)/ca/$caname/$type.pem
+            ;;
+        "crossroot")
+            case "$caname" in
+                "selfsign-ca-1")
+                    openssl x509 -outform PEM -in "$(pwd)/ca/$caname/certs/selfsign-ca-2/cert.pem"
+                    ;;
+                "selfsign-ca-2")
+                    openssl x509 -outform PEM -in "$(pwd)/ca/$caname/certs/selfsign-ca-1/cert.pem"
+                    ;;
+                *)
+                    echo "ca_pem:unknown ca:$caname" >&2
+                    return 1
+                    ;;
+            esac
+            ;;
+        *)
+            echo "ca_pem:unknown type:$type" >&2
+            return 1
+            ;;
     esac
     return 0
 }
@@ -71,11 +71,11 @@ EOF
        verify="-Verify 4"
     fi
     echo "" | \
-	openssl s_server \
-		$verify -tls1_2 \
-		-accept $port -CAfile $server_trust \
-		-cert $server_cert -key $server_key -pass file:pass.txt \
-		> /dev/null 2>&1 &
+        openssl s_server \
+                $verify -tls1_2 \
+                -accept $port -CAfile $server_trust \
+                -cert $server_cert -key $server_key -pass file:pass.txt \
+                > /dev/null 2>&1 &
     pid=$!
     sleep 1
 }
@@ -89,12 +89,12 @@ s_client(){
     local client_auth=""
     if [ -e "${client_cert}" -a -e "${client_key}" ]
     then
-	client_auth="-cert ${client_cert} -key ${client_key}"
+        client_auth="-cert ${client_cert} -key ${client_key}"
     fi
     openssl s_client -pass file:pass.txt -tls1_2 -quiet -no_ign_eof \
-	    -connect localhost:$port -CAfile $client_trust -servername $cn \
-	    $client_auth \
-	    </dev/null | tee >(grep err | wc -l > $result)
+            -connect localhost:$port -CAfile $client_trust -servername $cn \
+            $client_auth \
+            </dev/null | tee >(grep err | wc -l > $result)
 }
 oneTimeSetUp(){
     return 0
@@ -289,7 +289,7 @@ testConnectCrossRootClientAuth(){
     #クライアントに新中間認証局証明書をインストールしないと相互に認証できない？？それはありえんでしょ
     #ウェブサーバによくある、サーバ証明書に中間認証局証明書を入れた形での認証ができていないので、これは実際のウェブサーバで検証するしかなさそう
     ca_pem "selfsign-ca-1" "crossroot" >> $client_trust
-    	
+            
     cn="john.doe"
     client_cert=$(en_file "client-ca-1" "$cn" "cert")
     client_key=$(en_file "client-ca-1" "$cn" "key")
