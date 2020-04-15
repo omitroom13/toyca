@@ -1,6 +1,9 @@
 #!/bin/bash
 # openssl の CS.sh -newca を参照
 
+# 途中で死んだら popd で戻れないので、基本このスクリプトが置いてあるディレクトリで実行する。
+pushd $(dirname $0) > /dev/null
+
 if [ -n "${_TOYCA_CA_SH}" ]
 then
     return 0
@@ -404,19 +407,23 @@ then
 	    cn=$(echo "$dn" | sed -e 's@.*CN=\(.*\)$@\1@')
 	    set_ca $ca
 	    init_ca_param "" "" "$cn" "$dn" "" "" ""
-	    serial=$(grep "$dn" $CATOP/index.txt | awk '{print $3}')
+	    serial=$(grep "$dn" $CATOP/index.txt | awk '($1 == "V"){print $3}')
 	    cert="$CATOP/certs/$serial-$cn/cert.pem"
 	    if [[ -n $serial && -e $cert ]]
 	    then
+		# echo $CA -revoke $cert
 		$CA -revoke $cert
 	    else
 		echo "$dn, /CN=$cn or $cert not found in $ca"
 	    fi
 	    ;;
-	*)
-	    echo "Unknown arg $i" >&2
-	    exit 1
+	verify)
+            ca=$1
+            cn=$2
+            verifyServer "choroi-authenticator" "choroi-ca-1" "selfsign-ca-1"
 	    ;;
     esac
     exit 0
 fi
+
+popd
