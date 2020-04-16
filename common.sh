@@ -152,6 +152,78 @@ EOF
     return $packets
 }
 
+en_file(){
+    :<<EOF
+CA $caname で $cn について生成されたファイル $type のパスを返す
+EOF
+    local caname=$1
+    local cn=$2
+    local type=$3
+    case $caname in
+        "server-ca-1" | "server-ca-2" | "client-ca-1" | "client-ca-2")
+            local id=`grep "/CN=${cn}" ca/${caname}/index.txt | cut -f 4 | head -n 1`
+            cn="${id}-${cn}"
+        ;;
+    esac
+    echo "$(pwd)/ca/$caname/certs/${cn}/${type}.pem"
+}
+ca_pem(){
+    :<<EOF
+CA $caname について生成されたファイル $type を PEM 形式で返す
+EOF
+    local caname=$1
+    local type=$2
+    case "$type" in
+        "cacert")
+            openssl x509 -outform PEM -in $(pwd)/ca/$caname/$type.pem
+            ;;
+        "crl")
+            openssl crl  -outform PEM -in $(pwd)/ca/$caname/$type.pem
+            ;;
+        "crossroot")
+            case "$caname" in
+                "selfsign-ca-1")
+                    openssl x509 -outform PEM -in "$(pwd)/ca/$caname/certs/selfsign-ca-2/cert.pem"
+                    ;;
+                "selfsign-ca-2")
+                    openssl x509 -outform PEM -in "$(pwd)/ca/$caname/certs/selfsign-ca-1/cert.pem"
+                    ;;
+                *)
+                    echo "ca_pem:unknown ca:$caname" >&2
+                    return 1
+                    ;;
+            esac
+            ;;
+        *)
+            echo "ca_pem:unknown type:$type" >&2
+            return 1
+            ;;
+    esac
+    return 0
+}
+
+verifyServer(){
+    :<<EOF
+証明書 $server_cert を $server_trust を信頼するCA証明書のリポジトリとして検証する
+CApath では crl も探す。というか、-crlfile というオプションが man にはあるが、コマンドで指定するとエラーになるので CAfile に含めるしかない。順番は問われないようだ
+EOF
+    local cn=$1
+    shift
+    local leaf=$1
+    local chain=$*
+    local result="/tmp/$$-result.txt"
+    local log="/tmp/$$-result.log"
+    local server_cert=$(en_file "$leaf" "$cn" "cert")
+    local server_trust="/tmp/$$-server-trust.pem"
+    cat /dev/null > $server_trust
+    for ca in $chain
+    do
+        ca_pem "$ca" "cacert" >> $server_trust
+        ca_pem "$ca" "crl"    >> $server_trust
+    done
+    openssl verify -CAfile $server_trust -crl_check_all -purpose sslserver -issuer_checks -verbose $server_cert | tee >(grep ^error | wc -l > $result)
+}
+
 if [ "$0" = "-bash" ]
 then
     return

@@ -397,6 +397,23 @@ then
 	    export SAN=$san
 	    generate_certificate ca $start $end "$cn" "$dn" "$alg" "$param"
 	    ;;
+	gen_cert_fido)
+	    #細かい設定抜きで authenticadtor attestation key を生成したいとき
+	    #ca : 認証局名(server-ca-1 など)
+	    #cn : CA名
+	    ca=$1
+	    cn=$2
+	    san=$3
+	    alg=$4
+	    param=$5
+	    dn=$6
+	    if [[ -z "$dn" ]]; then dn="/CN=${cn}" ; fi
+	    set_ca $ca
+	    start=$(lifetime '+%Y/%m/01' "-1 years 0 months")
+	    end=$(lifetime '+%Y/%m/01' "1 years 0 months")
+	    export SAN=$san
+	    generate_certificate fido $start $end "$cn" "$dn" "$alg" "$param"
+	    ;;
 	gen_nginx_conf)
 	    gen_nginx_conf
 	    ;;
@@ -411,7 +428,6 @@ then
 	    cert="$CATOP/certs/$serial-$cn/cert.pem"
 	    if [[ -n $serial && -e $cert ]]
 	    then
-		# echo $CA -revoke $cert
 		$CA -revoke $cert
 	    else
 		echo "$dn, /CN=$cn or $cert not found in $ca"

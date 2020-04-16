@@ -64,6 +64,8 @@ EOF
     	"ocsp")
 	    NAME_POLICY_EXTENSIONS="-name ca_any -policy policy_any -extensions ext_ocsp"
     	;;
+    	"fido")
+	    NAME_POLICY_EXTENSIONS="-name ca_any -policy policy_any -extensions ext_fido"
     esac
     $CA -batch -out "$cert" -keyfile "$CAKEY" -startdate "$START" -enddate "$END" \
     	$NAME_POLICY_EXTENSIONS -infiles "$req"
