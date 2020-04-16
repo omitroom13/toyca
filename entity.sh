@@ -65,7 +65,8 @@ EOF
 	    NAME_POLICY_EXTENSIONS="-name ca_any -policy policy_any -extensions ext_ocsp"
     	;;
     	"fido")
-	    NAME_POLICY_EXTENSIONS="-name ca_any -policy policy_any -extensions ext_fido"
+            # fido はサーバに入らない国名などが必要らしく面倒なので、 choroi で署名することにしている
+	    NAME_POLICY_EXTENSIONS="-name ca_any -policy policy_choroi -extensions ext_fido"
     esac
     $CA -batch -out "$cert" -keyfile "$CAKEY" -startdate "$START" -enddate "$END" \
     	$NAME_POLICY_EXTENSIONS -infiles "$req"
