@@ -1,0 +1,9 @@
+FROM alpine
+
+RUN apk update && \
+  apk add --no-cache coreutils openssl bash tcpdump && \
+  rm -rf /var/cache/apk/*
+
+ENTRYPOINT ["bash"]
+
+WORKDIR /opt/toyca

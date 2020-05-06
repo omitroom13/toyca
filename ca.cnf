@@ -18,7 +18,19 @@ MS_ENROLL_CERTTYPE_EXTENSION  = ${microsoft}.20.2
 MS_CERTSRV_CA_VERSION         = ${microsoft}.21.1
 MS_REQUEST_CLIENT_INFO        = ${microsoft}.21.20
 MS_ENCRYPTED_KEY_HASH         = ${microsoft}.21.21   
-MS_CERTSRV_CROSSCA_VERSION    = ${microsoft}.21.22    
+MS_CERTSRV_CROSSCA_VERSION    = ${microsoft}.21.22
+
+yubico = 1.3.6.1.4.1.41482
+YUBIKEY_DEVICE_ID = ${yubico}.2
+YUBIKEY_5_2 = ${yubico}.1.7
+
+# [FIDO U2F Authenticator Transports Extension](https://fidoalliance.org/specs/fido-u2f-v1.2-ps-20170411/fido-u2f-authenticator-transports-extension-v1.2-ps-20170411.html#fido-u2f-certificate-extensions)
+id_fido = 1.3.6.1.4.1.45724
+
+# [FIDO Metadata Statements](https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-metadata-statement-v2.0-rd-20180702.html)
+ID_FIDO_GEN_CE_AAGUID = ${id_fido}.1.1.4 
+
+ID_FIDO_U2F_CE_TRANSPORTS = ${id_fido}.2.1.1
 
 [ ca ]
 default_ca	= ca_any		#!The default ca section
@@ -90,7 +102,7 @@ commonName_max			= 64
 subjectKeyIdentifier   = hash
 authorityKeyIdentifier = keyid:always,issuer
 basicConstraints       = CA:true
-authorityInfoAccess    = caIssuers;URI:http://$CRLAIA/$CANAME.cer
+authorityInfoAccess    = caIssuers;URI:http://$CRLAIA/$CANAME.cer,OCSP;URI:http://$CRLAIA/ocsp/$CANAME
 crlDistributionPoints  = URI:http://$CRLAIA/$CANAME.crl
 
 [ ext_enterprise ]
@@ -100,7 +112,7 @@ basicConstraints       = critical, CA:true
 keyUsage               = digitalSignature, keyCertSign, cRLSign
 MS_ENROLL_CERTTYPE_EXTENSION = ASN1:BMP:SubCA
 MS_CERTSRV_CA_VERSION  = ASN1:INTEGER:0
-authorityInfoAccess    = caIssuers;URI:http://$CRLAIA/$CANAME.cer
+authorityInfoAccess    = caIssuers;URI:http://$CRLAIA/$CANAME.cer,OCSP;URI:http://$CRLAIA/ocsp/$CANAME
 crlDistributionPoints  = URI:http://$CRLAIA/$CANAME.crl
 
 [ ext_client ]
@@ -113,7 +125,7 @@ keyUsage               = digitalSignature, keyEncipherment
 #email:<mailaddress>, otherName:msUPN;UTF8:<upn>
 subjectAltName         = $SAN
 authorityKeyIdentifier = keyid,issuer
-authorityInfoAccess    = caIssuers;URI:http://$CRLAIA/$CANAME.cer
+authorityInfoAccess    = caIssuers;URI:http://$CRLAIA/$CANAME.cer,OCSP;URI:http://$CRLAIA/ocsp/$CANAME
 crlDistributionPoints  = URI:http://$CRLAIA/$CANAME.crl
 
 [ ext_server ]
@@ -124,16 +136,39 @@ keyUsage               = digitalSignature, keyEncipherment
 #DNS:<fqdn or wildcard>, IP:<ip>, ....
 subjectAltName         = $SAN
 authorityKeyIdentifier = keyid,issuer
-authorityInfoAccess    = caIssuers;URI:http://$CRLAIA/$CANAME.cer
+authorityInfoAccess    = caIssuers;URI:http://$CRLAIA/$CANAME.cer,OCSP;URI:http://$CRLAIA/ocsp/$CANAME
 crlDistributionPoints  = URI:http://$CRLAIA/$CANAME.crl
 #EV SSL
 #policyConstraints     =
+
+[ ext_ocsp ]
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints       = CA:FALSE
+keyUsage               = nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage       = OCSPSigning
 
 [ ext_client_ms ]
 #以下のエクステンションがMSのクライアント証明書特有かもしれないが、おそらくいらない。
 MS_CERTIFICATE_TEMPLATE       = DER:302E06262B060104018237150885F88F1C86FED61787A98F0986F48C1F81D38F094B87B49405839DA83502016402010D
 MS_APPLICATION_CERT_POLICIES  = DER:3026300C060A2B060104018237140202300A06082B06010505070302300A06082B06010505070304
 SMIME-CAPS                    = DER:3035300E06082A864886F70D030202020080300E06082A864886F70D030402020080300706052B0E030207300A06082A864886F70D0307
+
+[ ext_fido ]
+basicConstraints       = critical,CA:FALSE
+# カプセル化しない FORMAT:ASCII,OCT:1.3.6.1.4.1.41482.1.7
+YUBIKEY_DEVICE_ID = DER:312e332e362e312e342e312e34313438322e312e37
+# https://support.yubico.com/support/solutions/articles/15000028710-yubikey-hardware-fido2-aaguids
+# yubikey 5.1
+ID_FIDO_GEN_CE_AAGUID = ASN1:FORMAT:HEX,OCT:CB69481E8FF7403993EC0A2729A154A8
+# https://fidoalliance.org/specs/fido-u2f-v1.2-ps-20170411/fido-u2f-authenticator-transports-extension-v1.2-ps-20170411.html
+# 3.2.1 FIDO U2F certificate transports extension
+# uSB(2) のみセット
+ID_FIDO_U2F_CE_TRANSPORTS = ASN1:FORMAT:BITLIST,BITSTRING:2
+
+authorityKeyIdentifier = keyid,issuer
+authorityInfoAccess    = caIssuers;URI:http://$CRLAIA/$CANAME.cer,OCSP;URI:http://$CRLAIA/ocsp/$CANAME
+crlDistributionPoints  = URI:http://$CRLAIA/$CANAME.crl
 
 [ crl_ext ]
 authorityKeyIdentifier=keyid:always

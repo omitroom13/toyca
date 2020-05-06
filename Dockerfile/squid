@@ -1,0 +1,10 @@
+FROM squid
+COPY ./squid.conf /etc/squid/squid.conf
+COPY ./ca/selfsign-ca-2/certs/proxy-ca-2/cert.pem /etc/squid/cert.pem
+COPY ./ca/selfsign-ca-2/certs/proxy-ca-2/key-nopass.pem /etc/squid/key.pem
+USER root
+RUN /usr/lib/squid/ssl_crtd -c -s /var/lib/ssl_db;\
+    chown -R squid.squid /var/lib/ssl_db;\
+    chown -R squid.squid /etc/squid/*.pem;\
+    chown -R root.root /etc/squid/squid.conf
+USER squid

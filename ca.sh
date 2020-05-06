@@ -1,6 +1,9 @@
 #!/bin/bash
 # openssl の CS.sh -newca を参照
 
+# 途中で死んだら popd で戻れないので、基本このスクリプトが置いてあるディレクトリで実行する。
+pushd $(dirname $0) > /dev/null
+
 if [ -n "${_TOYCA_CA_SH}" ]
 then
     return 0
@@ -28,11 +31,12 @@ EOF
     END=$2
     CN=$3
     DN=$4
-    #CERT/KEY 渡されても何もしてないやん...
-    CERT=$5
-    KEY=$6
+    PKEY_ALG=$5
+    PKEY_PARAM=$6
+    echo init_ca_param $START $END $CN $DN $PKEY_ALG $PKEY_PARAM
 
     CAKEY=${CATOP}/private/cakey.pem
+    CAKEY_NOPASS=${CATOP}/private/cakey-nopass.pem
     CAREQ=${CATOP}/careq.pem
     CACERT=${CATOP}/cacert.pem
 
@@ -66,6 +70,8 @@ EOF
     unset REQ
     unset CA
     unset PKCS12
+    unset PKEY_ALG
+    unset PKEY_PARAM
 }
 
 publish_crl(){
@@ -83,9 +89,11 @@ EOF
 
 newcert() {
     :<<EOF
-これ obsolete でよい?
+これ obsolete, generate_certificate に移行ずみでよい?
 EOF
-    init_ca_param $1 $2 $3 $4 "" ""
+    echo "newcert: expected to be obsoleted(but executed)!"
+    exit 1
+    init_ca_param $1 $2 $3 $4 $5 $6
     mkdir -p $TOP
     $REQ -new -keyout $key -out $req -passout file:$PASS -subj "$DN"
     $CA -batch -out $cert -keyfile $CAKEY -passin file:$PASS \
@@ -96,9 +104,18 @@ EOF
 
 newca() {
     :<<EOF
-    新規CAを作る
+    新規 root CAを作る. 中間の場合は generate_certificate を使う
 EOF
-    init_ca_param $1 $2 $3 $4 $5 $6
+    echo "newca"
+    START=$1
+    END=$2
+    CN=$3
+    DN=$4
+    PKEY_ALG=$5
+    PKEY_PARAM=$6
+    init_ca_param $START $END $CN $DN $PKEY_ALG $PKEY_PARAM
+    CERT=$7
+    KEY=$8
     if [ -e ${CATOP} ]; then
 	echo "$CN already exists." >&2
 	return 1
@@ -116,15 +133,22 @@ EOF
     echo '00' > ${CATOP}/crlnumber
     if [ -e "$CERT" -a -e "$KEY" ]
     then
-	#intermediate CA
+	#CERT および KEY は上位CAで生成済みの公開鍵と秘密鍵なので、指定されていた場合ここで生成するのは下位(中間)CAということになる
 	cp $CERT $CACERT
 	cp $KEY $CAKEY
     else
-	#root CA
-	$REQ -new -keyout $CAKEY -out $CAREQ -passout file:$PASS -subj "$DN"
-	$CA -selfsign -batch -out $CACERT -keyfile $CAKEY -passin file:$PASS \
+	#CERT および KEY が設定されていない場合、ここで生成するのはルートCAということになる
+	echo genpkey "$CAKEY" $PKEY_ALG $PKEY_PARAM
+	genpkey "$CAKEY" $PKEY_ALG $PKEY_PARAM
+	#$REQ -new -keyout $CAKEY -out $CAREQ -passout file:$PASS -subj "$DN"
+	echo $REQ -new -key $CAKEY -out $CAREQ -subj "$DN"
+	$REQ -new -key $CAKEY -out $CAREQ -subj "$DN"
+	$CA -selfsign -batch -out $CACERT -keyfile $CAKEY \
 	    -name ca_any -extensions ext_ca -startdate $START -enddate $END \
 	    -infiles $CAREQ
+	echo "ccccccc"
+	#↓テストしていない
+	openssl pkey -in "$CAKEY" -out "$CAKEY_NOPASS" -passin file:"$PASS"
     fi
     #cer は CRL と組でWeb公開に使う
     cp $CACERT $PUBLISH/$CN.cer
@@ -180,21 +204,20 @@ EOF
 	local dn="/O=ToyCA/CN=$cn"
 	if [ "$caname" != "selfsign-ca" ]
 	then
-	    # newcert "$(pwd)/ca/selfsign-ca-$N" $START_CA $END_CA $CN "$DN"
-	    echo gen_cert_ca $START_CA $END_CA "$cn" "$dn"
-	    gen_cert_ca $START_CA $END_CA "$cn" "$dn"
+	    echo gen_cert_ca $START_CA $END_CA "$cn" "$dn" rsa rsa_keygen_bits:2048
+	    gen_cert_ca $START_CA $END_CA "$cn" "$dn" rsa rsa_keygen_bits:2048
 	    cert="$CATOP/certs/$cn/cert.pem"
 	    key="$CATOP/certs/$cn/key.pem"
 	fi
 	export CATOP="$(pwd)/ca/$cn"
-	echo newca $START_CA $END_CA "$cn" "$dn" $cert $key
-	newca $START_CA $END_CA "$cn" "$dn" $cert $key
+	echo newca $START_CA $END_CA "$cn" "$dn" rsa rsa_keygen_bits:2048 $cert $key
+	newca $START_CA $END_CA "$cn" "$dn" rsa rsa_keygen_bits:2048 $cert $key
     done
     cert=""
     key=""
     cd www
     #cer と crt 同じ証明書があること、で WARNING が出力される
-    c_rehash .
+    openssl rehash .
     cd ..
 }
 
@@ -216,7 +239,7 @@ EOF
     N=$new_n
     CN=$new_caname
     DN="/O=ToyCA/CN=$CN"
-    init_ca_param $START_CA $END_CA $CN $DN "" ""
+    init_ca_param $START_CA $END_CA $CN $DN
     mkdir -p $TOP
     ln -s "$(pwd)/ca/${new_caname}/careq.pem" $req
     ln -s "$(pwd)/ca/${new_caname}/private/cakey.pem" $key
@@ -238,7 +261,7 @@ EOF
     N=$old_n
     CN=$old_caname
     DN="/O=ToyCA/CN=$CN"
-    init_ca_param $START_CA $END_CA $CN $DN "" ""
+    init_ca_param $START_CA $END_CA $CN $DN
     mkdir -p $TOP
     ln -s "$(pwd)/ca/${old_caname}/careq.pem" $req
     ln -s "$(pwd)/ca/${old_caname}/private/cakey.pem" $key 
@@ -273,7 +296,7 @@ EOF
     s@_SERVERNAME6_@ca.example.com@g;
 " index.html.template > www/index.html
     sed -e "
-    s@_WWW_@/var/www/html@g;
+    s@_WWW_@/usr/share/nginx/html@g;
     s@_SERVERNAME1_@ca.example.com@g;
     s@_CERT1_@$path/server-ca-2/certs/ca.example.com@g;
 
@@ -293,7 +316,7 @@ EOF
     s@_CERT6_@$path/server-ca-2/certs/ca.example.com@g;
     s@_CERT6CLIENT_@$path/client-ca-1@g;
     s@_CERT6TRUSTED_@$path/selfsign-ca-1@g;
-" nginx.conf.template > nginx.conf
+" nginx.conf.template > www/nginx.conf
 }
 
 clean(){
@@ -332,25 +355,91 @@ then
 	    ca=$1
 	    cn=$2
 	    san=$3
+	    alg=$4
+	    param=$5
 	    dn="/CN=${cn}"
-	    if [ -z "$san" ]
-	    then
-		san="DNS:${cn}"
-	    fi
 	    set_ca $ca
 	    start=$(lifetime '+%Y/%m/01' "-1 years 0 months")
 	    end=$(lifetime '+%Y/%m/01' "1 years 0 months")
 	    export SAN=$san
-	    echo $SAN
-	    gen_cert_server $start $end "$cn" "$dn"
+	    generate_certificate server $start $end "$cn" "$dn" "$alg" "$param"
+	    ;;
+	gen_cert_ocsp)
+	    #細かい設定抜きでサーバ証明書を生成したいとき
+	    #ca : 認証局名(server-ca-1 など)
+	    #cn : サーバ名(またはIPアドレス)
+	    ca=$1
+	    cn=$2
+	    san=$3
+	    alg=$4
+	    param=$5
+	    dn="/CN=${cn}"
+	    set_ca $ca
+	    start=$(lifetime '+%Y/%m/01' "-1 years 0 months")
+	    end=$(lifetime '+%Y/%m/01' "1 years 0 months")
+	    export SAN=$san
+	    generate_certificate ocsp $start $end "$cn" "$dn" "$alg" "$param"
+	    ;;
+	gen_cert_ca)
+	    #細かい設定抜きで中間認証局を生成したいとき
+	    #ca : 認証局名(server-ca-1 など)
+	    #cn : CA名
+	    ca=$1
+	    cn=$2
+	    san=$3
+	    alg=$4
+	    param=$5
+	    dn=$6
+	    if [[ -z "$dn" ]]; then dn="/CN=${cn}" ; fi
+	    set_ca $ca
+	    start=$(lifetime '+%Y/%m/01' "-1 years 0 months")
+	    end=$(lifetime '+%Y/%m/01' "1 years 0 months")
+	    export SAN=$san
+	    generate_certificate ca $start $end "$cn" "$dn" "$alg" "$param"
+	    ;;
+	gen_cert_fido)
+	    #細かい設定抜きで authenticadtor attestation key を生成したいとき
+	    #ca : 認証局名(server-ca-1 など)
+	    #cn : CA名
+	    ca=$1
+	    cn=$2
+	    san=$3
+	    alg=$4
+	    param=$5
+	    dn=$6
+	    if [[ -z "$dn" ]]; then dn="/CN=${cn}" ; fi
+	    set_ca $ca
+	    start=$(lifetime '+%Y/%m/01' "-1 years 0 months")
+	    end=$(lifetime '+%Y/%m/01' "1 years 0 months")
+	    export SAN=$san
+	    generate_certificate fido $start $end "$cn" "$dn" "$alg" "$param"
 	    ;;
 	gen_nginx_conf)
 	    gen_nginx_conf
 	    ;;
-	*)
-	    echo "Unknown arg $i" >&2
-	    exit 1
+	revoke)
+	    ca=$1
+	    dn=$2
+	    export SAN=""
+	    cn=$(echo "$dn" | sed -e 's@.*CN=\(.*\)$@\1@')
+	    set_ca $ca
+	    init_ca_param "" "" "$cn" "$dn" "" "" ""
+	    serial=$(grep "$dn" $CATOP/index.txt | awk '($1 == "V"){print $3}')
+	    cert="$CATOP/certs/$serial-$cn/cert.pem"
+	    if [[ -n $serial && -e $cert ]]
+	    then
+		$CA -revoke $cert
+	    else
+		echo "$dn, /CN=$cn or $cert not found in $ca"
+	    fi
+	    ;;
+	verify)
+            ca=$1
+            cn=$2
+            verifyServer "choroi-authenticator" "choroi-ca-1" "selfsign-ca-1"
 	    ;;
     esac
     exit 0
 fi
+
+popd

@@ -10,6 +10,7 @@ ToyCA - 検証用認証局
    :maxdepth: 2
    :caption: Contents:
 
+   00-setup.md
    01.md
    02.md
    03.md

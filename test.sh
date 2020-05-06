@@ -2,55 +2,6 @@
 
 . ./ca.sh
 
-en_file(){
-    :<<EOF
-CA $caname で $cn について生成されたファイル $type のパスを返す
-EOF
-    local caname=$1
-    local cn=$2
-    local type=$3
-    case $caname in
-	"server-ca-1" | "server-ca-2" | "client-ca-1" | "client-ca-2")
-	    local id=`grep "/CN=${cn}" ca/${caname}/index.txt | cut -f 4 | head -n 1`
-	    cn="${id}-${cn}"
-	;;
-    esac
-    echo "$(pwd)/ca/$caname/certs/${cn}/${type}.pem"
-}
-ca_pem(){
-    :<<EOF
-CA $caname について生成されたファイル $type を PEM 形式で返す
-EOF
-    local caname=$1
-    local type=$2
-    case "$type" in
-	"cacert")
-	    openssl x509 -outform PEM -in $(pwd)/ca/$caname/$type.pem
-	    ;;
-	"crl")
-	    openssl crl  -outform PEM -in $(pwd)/ca/$caname/$type.pem
-	    ;;
-	"crossroot")
-	    case "$caname" in
-		"selfsign-ca-1")
-		    openssl x509 -outform PEM -in "$(pwd)/ca/$caname/certs/selfsign-ca-2/cert.pem"
-		    ;;
-		"selfsign-ca-2")
-		    openssl x509 -outform PEM -in "$(pwd)/ca/$caname/certs/selfsign-ca-1/cert.pem"
-		    ;;
-		*)
-		    echo "ca_pem:unknown ca:$caname" >&2
-		    return 1
-		    ;;
-	    esac
-	    ;;
-	*)
-	    echo "ca_pem:unknown type:$type" >&2
-	    return 1
-	    ;;
-    esac
-    return 0
-}
 s_server(){
     :<<EOF
 openssl s_server $server_cert をもつサーバを起動する
@@ -71,11 +22,11 @@ EOF
        verify="-Verify 4"
     fi
     echo "" | \
-	openssl s_server \
-		$verify -tls1_2 \
-		-accept $port -CAfile $server_trust \
-		-cert $server_cert -key $server_key -pass file:pass.txt \
-		> /dev/null 2>&1 &
+        openssl s_server \
+                $verify -tls1_2 \
+                -accept $port -CAfile $server_trust \
+                -cert $server_cert -key $server_key -pass file:pass.txt \
+                > /dev/null 2>&1 &
     pid=$!
     sleep 1
 }
@@ -89,12 +40,12 @@ s_client(){
     local client_auth=""
     if [ -e "${client_cert}" -a -e "${client_key}" ]
     then
-	client_auth="-cert ${client_cert} -key ${client_key}"
+        client_auth="-cert ${client_cert} -key ${client_key}"
     fi
     openssl s_client -pass file:pass.txt -tls1_2 -quiet -no_ign_eof \
-	    -connect localhost:$port -CAfile $client_trust -servername $cn \
-	    $client_auth \
-	    </dev/null | tee >(grep err | wc -l > $result)
+            -connect localhost:$port -CAfile $client_trust -servername $cn \
+            $client_auth \
+            </dev/null | tee >(grep err | wc -l > $result)
 }
 oneTimeSetUp(){
     return 0
@@ -111,29 +62,20 @@ tearDown(){
     #rm -f /tmp/$$-*.pem
     echo "------------------------------------------------------"
 }
-NotestCreate() {
+testCreate() {
     clean
     assertEquals 0 $?
     create_both
     assertEquals 0 $?
 }
-NotestVerifyServer(){
+testVerifyServer(){
     :<<EOF
-証明書 $server_cert を $server_trust を信頼するCA証明書のリポジトリとして検証する
-CApath では crl も探す。というか、-crlfile というオプションが man にはあるが、コマンドで指定するとエラーになるので CAfile に含めるしかない。順番は問われないようだ
 EOF
-    local result="/tmp/$$-result.txt"
-    local log="/tmp/$$-result.log"
-    local server_cert=$(en_file "server-ca-1" "ca.example.com" "cert")
-    local server_trust="/tmp/$$-server-trust.pem"
-    ca_pem "selfsign-ca-1" "cacert"  > $server_trust
-    ca_pem "selfsign-ca-1" "crl"    >> $server_trust
-    ca_pem "server-ca-1" "cacert"   >> $server_trust
-    ca_pem "server-ca-1" "crl"      >> $server_trust
-    openssl verify -CAfile $server_trust -crl_check_all -purpose sslserver -issuer_checks -verbose $server_cert | tee >(grep ^error | wc -l > $result)
+    verifyServer "choroi-authenticator" "choroi-ca-1" "selfsign-ca-1" | tee >(grep ^error | wc -l > $result)
     assertEquals 0 $(cat $result)
 }
-NotestVerifyCrossRoot(){
+
+testVerifyCrossRoot(){
     :<<EOF
 クロスルート証明書(OldWithNew, NewWithOld)を検証する。
 比較のために通常の証明書(NewWithNew, OldWithOld)も検証する
@@ -181,7 +123,7 @@ EOF
 
     rm -f /tmp/$$-*
 }
-NotestConnect(){
+testConnect(){
     #中間認証局証明書をサーバ証明書に入れる
     local cn="ca.example.com"
     local result="/tmp/$$-result.log"
@@ -201,7 +143,7 @@ NotestConnect(){
     # 停止している？
     # kill $pid
 }
-NotestConnectCrossroot(){
+testConnectCrossroot(){
     local cn="ca.example.com"
     local result="/tmp/$$-result.log"
     local server_trust="/tmp/$$-server.pem"
@@ -229,7 +171,7 @@ NotestConnectCrossroot(){
     assertEquals 0 $(cat $result)
     # kill $pid
 }
-NotestConnectClientAuth(){
+testConnectClientAuth(){
     #クライアント証明書有無
     local cn="ca.example.com"
     local result="/tmp/$$-result.log"
@@ -253,7 +195,7 @@ NotestConnectClientAuth(){
     assertEquals 0 $(cat $result)
     #kill $pid
 }
-NotestConnectCrossRootClientAuth(){
+testConnectCrossRootClientAuth(){
     #クライアント証明書有無
     local cn="ca.example.com"
     local result="/tmp/$$-result.log"
@@ -289,7 +231,7 @@ NotestConnectCrossRootClientAuth(){
     #クライアントに新中間認証局証明書をインストールしないと相互に認証できない？？それはありえんでしょ
     #ウェブサーバによくある、サーバ証明書に中間認証局証明書を入れた形での認証ができていないので、これは実際のウェブサーバで検証するしかなさそう
     ca_pem "selfsign-ca-1" "crossroot" >> $client_trust
-    	
+            
     cn="john.doe"
     client_cert=$(en_file "client-ca-1" "$cn" "cert")
     client_key=$(en_file "client-ca-1" "$cn" "key")
@@ -300,7 +242,7 @@ NotestConnectCrossRootClientAuth(){
     assertEquals 0 $(cat $result)
     # kill $pid
 }
-NotestNginx() {
+testNginx() {
     local cn="ca.example.com"
     local id=`grep "/CN=${cn}" ca/server-ca-1/index.txt | cut -f 4 | head -n 1`
     local _WWW_="$(pwd)/www"
