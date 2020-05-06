@@ -217,7 +217,7 @@ EOF
     key=""
     cd www
     #cer と crt 同じ証明書があること、で WARNING が出力される
-    c_rehash .
+    openssl rehash .
     cd ..
 }
 
