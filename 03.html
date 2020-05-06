@@ -79,24 +79,39 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="00-setup.html">インストール</a></li>
 <li class="toctree-l1"><a class="reference internal" href="01.html">方針</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02.html">その他</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">参考文献・メモ</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#todo">ToDo</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#sphinx">sphinx</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pBMNh">機能</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Eq1nJ3">ディレクトリ構成</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#mbMxd2">加えるべきデモ・テスト</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#cECUy3">テストで再現したいエラー</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#vfRiB2">証明書リポジトリの操作</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#3hITz">その他</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ubuntu">Ubuntu</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#firefox">Firefox</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#cipher-suite">cipher suite</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#aesgcm">AESGCM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#DyTHW3">盗聴可能＆不可能</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#or">クライアントで接続可 or 不可が別れる微妙な例</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tcpdump-tshark">tcpdump からの tshark</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tls">tls 復号</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#tshark">tshark の出力とテスト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tls1-2-sslv3">これどういう意味なんだ? tls1_2 指定なのに sslv3 とは…</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yGm2z">cipher suite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#chrome-cipher-suite">chrome の cipher suite 設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#wireshark">wireshark のヘルプ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#squid-bumping">squid bumping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#k7Tog">参考</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tls-1-3">TLS 1.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nginx">nginx エラー</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#go-ed25519">go で　ed25519 を使う</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nginx-conf">nginx.conf 設定変えた場合</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#http-3-quic-tls-1-3">HTTP/3, QUIC, TLS 1.3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ed25519-openssl">ed25519 に対応していない openssl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gV6cP1">tls 1.3 / ブラウザ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#caddy-ed25519-golang">caddy/ed25519/golang</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#k7Tog">参考</a></li>
 </ul>
 </li>
 </ul>
@@ -168,125 +183,8 @@
   <div class="section" id="eEkZR2">
 <span id="id1"></span><h1>参考文献・メモ<a class="headerlink" href="#eEkZR2" title="Permalink to this headline">¶</a></h1>
 <p>正式なドキュメントにはあまり入れるべきでない、自分宛てメモ</p>
-<div class="section" id="todo">
-<span id="J5Z44"></span><h2>ToDo<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="sphinx">
-<span id="PYSja"></span><h3>sphinx<a class="headerlink" href="#sphinx" title="Permalink to this headline">¶</a></h3>
-<p>ユーザにビルドさせるのは無理があった？
-リポジトリに入れるべき？
-docker 内でビルドするべき？</p>
-</div>
-<div class="section" id="pBMNh">
-<span id="id2"></span><h3>機能<a class="headerlink" href="#pBMNh" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>証明書の暗号方式を最低限次の2つから選択できるようにする<ul>
-<li>prime256v1</li>
-<li>rsa:2048</li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="section" id="Eq1nJ3">
-<span id="id3"></span><h3>ディレクトリ構成<a class="headerlink" href="#Eq1nJ3" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>nginx.conf は www とかに移動</li>
-<li>生成した証明書類は _build とかに移動</li>
-</ul>
-</div>
-<div class="section" id="mbMxd2">
-<span id="id4"></span><h3>加えるべきデモ・テスト<a class="headerlink" href="#mbMxd2" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>ocsp responder<ul>
-<li>ocsp stapling の前提。openssl で動けばよいか..</li>
-<li><a class="reference external" href="https://www.gleas.jp/wp-content/uploads/2015/06/GleasWhitepaper_1509_OCSPResponder.pdf">OpenCA/ocspd</a></li>
-<li><a class="reference external" href="https://hogem.hatenablog.com/entry/20140509/1399588017">openssl ocsp 1</a></li>
-<li><a class="reference external" href="http://d.hatena.ne.jp/blooper/20120912/1347465070">oepnssl ocsp 2</a></li>
-<li><a class="reference external" href="https://mod.gnutls.org/browser/mod_gnutls/test/data/ocsp.cgi">mod_gnutls</a></li>
-</ul>
-</li>
-<li>Authority Information Access<ul>
-<li>まともに設定してしまうと、中間認証局証明書の設定が間違っていることに気づかず混乱する(IEでだけAIAにフォールバックして解決してしまう)可能性があり、設定しないほうが良い気がしてきた。認証局にアクセスしたことが伝わってしまうという点にもなんか問題がある気がする</li>
-</ul>
-</li>
-<li>CRL Distribution Point<ul>
-<li>OCSP stapling のほうが優先?</li>
-</ul>
-</li>
-<li>クライアントを使ったテスト<ul>
-<li>機能的には chrome/firefox である必要はない。証明書リポジトリの操作もそう簡単ではない。openssl s_client は単体テストで扱えばよいとすると、wget/curl で済ませるのがよさそう</li>
-<li>hostsやリポジトリを修正してテストするのであれば、テストする場所はコンテナ内のほうが良さそう</li>
-</ul>
-</li>
-<li>パケットキャプチャ<ul>
-<li>server/client hello の確認</li>
-<li>PFS の確認</li>
-<li>cipersuite の確認</li>
-<li>復号<ul>
-<li>秘密鍵で復号できること</li>
-<li>PFSでは秘密鍵があっても復号できないこと</li>
-<li>PFSでもセッションキーがあれば復号できること</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>証明書の失効<ul>
-<li>CRL<ul>
-<li>一応</li>
-</ul>
-</li>
-<li>OCSP<ul>
-<li>コンテナで建てやすいなら</li>
-</ul>
-</li>
-<li>OCSP stapling<ul>
-<li>これはやっておいたほうが良さそうな気がする</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>IPv6<ul>
-<li><a class="reference external" href="http://blog.livedoor.jp/k_urushima/archives/1839342.html">最近の証明書の話題(2): CloudFlare DNS 1.1.1.1サイトのIPv6証明書</a></li>
-<li>ssl/tls の観点ではあまり有意義ではないかも</li>
-</ul>
-</li>
-<li>Public Key Pinning<ul>
-<li>どうもブラウザにpinを添付できる最大手サイトでないと実用レベルの運用はできなさそう。優先度は低いだろう</li>
-</ul>
-</li>
-<li>HTTP2<ul>
-<li>ssl/tls の観点ではあまり有意義ではないかも</li>
-</ul>
-</li>
-<li>HSTS<ul>
-<li>ssl/tls の観点ではあまり有意義ではないかも</li>
-</ul>
-</li>
-</ul>
-<p>ssl_ciphers ‘PSK-NULL-SHA’; とかにしてエラーが出ることを確認する
-この辺のメモどこいった？？</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">openssl</span> <span class="n">ciphers</span> <span class="o">-</span><span class="n">v</span> <span class="s1">&#39;kECDHE+aECDSA+AESGCM:kDH+aDH+AES:k:!SHA1&#39;</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="cECUy3">
-<span id="id5"></span><h3>テストで再現したいエラー<a class="headerlink" href="#cECUy3" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>Cannot communicate securely with peer: no common encryption algorithm(s). エラーコード: SSL_ERROR_NO_CYPHER_OVERLAP<ul>
-<li>Firefox でウェブサーバに接続したときに発生</li>
-<li>ca.conf の ssl_ciphers が不適切</li>
-<li>ブラウザの使用暗号スイートを確認する(ページ情報/セキュリティ/技術情報)</li>
-</ul>
-</li>
-<li>Peer’s certificate has an invalid signature. エラーコード: SEC_ERROR_BAD_SIGNATURE<ul>
-<li>Firefox でウェブサーバに接続したときに発生</li>
-<li>ルート証明書がブラウザにインストールされていない</li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div class="section" id="vfRiB2">
-<span id="id6"></span><h2>証明書リポジトリの操作<a class="headerlink" href="#vfRiB2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="3hITz">
+<span id="id2"></span><h2>その他<a class="headerlink" href="#3hITz" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="ubuntu">
 <span id="Qs2y9"></span><h3>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h3>
 <p>Ubuntu で独自に認証局証明書を追加する場合、 /usr/local/share/ca-certificates 以下に置いてコマンド</p>
@@ -325,19 +223,537 @@ docker 内でビルドするべき？</p>
 <blockquote>
 <div>暗号化と同時に完全性や認証性も実現するための暗号方式 (たとえば GCM) が考案され、それらを総称して AEDA (Authenticated Encryption with Asocciated Data) と呼ばれます。暗号スイートの Mac の部分に AEAD という表記があるものは、暗号モードとして認証付き暗号の GCM が利用されています。</div></blockquote>
 <p>AESGCM とした場合 mac は指定せず ‘ECDH+aRSA+AESGCM’ などとするようだ。ECDH+aRSA+AESGCM+SHA256 としてもヒットしない。</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ openssl ciphers -v &#39;ECDH+aRSA+AESGCM&#39;
-ECDHE-RSA-AES256-GCM-SHA384 TLSv1.2 Kx=ECDH     Au=RSA  Enc=AESGCM(256) Mac=AEAD
-ECDHE-RSA-AES128-GCM-SHA256 TLSv1.2 Kx=ECDH     Au=RSA  Enc=AESGCM(128) Mac=AEAD
-
-$ openssl ciphers -v &#39;ECDH+aRSA+AESGCM+AEAD&#39;
-Error in cipher list
-139825319563712:error:1410D0B9:SSL routines:SSL_CTX_set_cipher_list:no cipher match:../ssl/ssl_lib.c:2129:
-
-$ openssl ciphers -v &#39;ECDH+aRSA+AESGCM+SHA&#39;
-Error in cipher list
-140489317126592:error:1410D0B9:SSL routines:SSL_CTX_set_cipher_list:no cipher match:../ssl/ssl_lib.c:2129:
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># openssl ciphers -s -stdname -v -tls1 -tls1_1 -tls1_2 &#39;ECDHE+aRSA+AESGCM&#39;</span>
+<span class="n">TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384</span> <span class="o">-</span> <span class="n">ECDHE</span><span class="o">-</span><span class="n">RSA</span><span class="o">-</span><span class="n">AES256</span><span class="o">-</span><span class="n">GCM</span><span class="o">-</span><span class="n">SHA384</span> <span class="n">TLSv1</span><span class="o">.</span><span class="mi">2</span> <span class="n">Kx</span><span class="o">=</span><span class="n">ECDH</span>     <span class="n">Au</span><span class="o">=</span><span class="n">RSA</span>  <span class="n">Enc</span><span class="o">=</span><span class="n">AESGCM</span><span class="p">(</span><span class="mi">256</span><span class="p">)</span> <span class="n">Mac</span><span class="o">=</span><span class="n">AEAD</span>
+<span class="n">TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256</span> <span class="o">-</span> <span class="n">ECDHE</span><span class="o">-</span><span class="n">RSA</span><span class="o">-</span><span class="n">AES128</span><span class="o">-</span><span class="n">GCM</span><span class="o">-</span><span class="n">SHA256</span> <span class="n">TLSv1</span><span class="o">.</span><span class="mi">2</span> <span class="n">Kx</span><span class="o">=</span><span class="n">ECDH</span>     <span class="n">Au</span><span class="o">=</span><span class="n">RSA</span>  <span class="n">Enc</span><span class="o">=</span><span class="n">AESGCM</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span> <span class="n">Mac</span><span class="o">=</span><span class="n">AEAD</span>
 </pre></div>
 </div>
+<p>TLS 1.3 は上記のようなこれまでの検索式ではなく<a class="reference external" href="https://www.openssl.org/docs/man1.1.1/man1/ciphers.html">オプション ciphersuite で条件を指定するようになっているので</a>、分けて探すようにする。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># openssl ciphers -stdname -v -s -tls1_3 -ciphersuites TLS_CHACHA20_POLY1305_SHA256</span>
+<span class="n">TLS_CHACHA20_POLY1305_SHA256</span> <span class="o">-</span> <span class="n">TLS_CHACHA20_POLY1305_SHA256</span> <span class="n">TLSv1</span><span class="o">.</span><span class="mi">3</span> <span class="n">Kx</span><span class="o">=</span><span class="nb">any</span>      <span class="n">Au</span><span class="o">=</span><span class="nb">any</span>  <span class="n">Enc</span><span class="o">=</span><span class="n">CHACHA20</span><span class="o">/</span><span class="n">POLY1305</span><span class="p">(</span><span class="mi">256</span><span class="p">)</span> <span class="n">Mac</span><span class="o">=</span><span class="n">AEAD</span>
+</pre></div>
+</div>
+<p>単に -tls1_3 などで TLS 1.3 を検索対象にして ciphersuite を明示しない場合、オプション(正確には SSL_CTX_set_ciphersuites)のデフォルトで結果が表示されてしまう。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># openssl ciphers -stdname -v &#39;TLSv1&#39; | awk &#39;{print $4}&#39; | sort | uniq</span>
+<span class="n">TLSv1</span>
+<span class="n">TLSv1</span><span class="o">.</span><span class="mi">3</span>
+<span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># openssl ciphers -stdname -v &#39;TLSv1.2&#39; | awk &#39;{print $4}&#39; | sort | uniq</span>
+<span class="n">TLSv1</span><span class="o">.</span><span class="mi">2</span>
+<span class="n">TLSv1</span><span class="o">.</span><span class="mi">3</span>
+<span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># openssl ciphers -stdname -v &#39;TLSv1.3&#39; | awk &#39;{print $4}&#39; | sort | uniq</span>
+<span class="n">TLSv1</span><span class="o">.</span><span class="mi">3</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://trac.nginx.org/nginx/ticket/1529#comment:7">NGINX ではこれに対応するつもりはないようだ</a>。</p>
+<blockquote>
+<div>It’s clearly that they are using a new option to configure TLS1.3-ONLY ciphers now. So would anyone to add the support?</div></blockquote>
+<p>せやな。これに気づかないで ssl_ciphers に TLS 1.3 の設定をしているつもりのブログがたくさんある。性能試験のために調べて真に受けてしまうとえらい目に遭いそう。</p>
+<p>library/nginx-alpine (nginx 1.15.10, 0476319fbdad) は TLS_AES_256_GCM_SHA384 は一位でコンパイルされている</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># openssl s_client -connect www:8445 -servername ec.ed25515.example.com &lt; /dev/null </span>
+<span class="o">...</span>
+<span class="o">---</span>
+<span class="n">No</span> <span class="n">client</span> <span class="n">certificate</span> <span class="n">CA</span> <span class="n">names</span> <span class="n">sent</span>
+<span class="n">Peer</span> <span class="n">signature</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Ed25519</span>
+<span class="n">Server</span> <span class="n">Temp</span> <span class="n">Key</span><span class="p">:</span> <span class="n">X25519</span><span class="p">,</span> <span class="mi">253</span> <span class="n">bits</span>
+<span class="o">---</span>
+<span class="n">SSL</span> <span class="n">handshake</span> <span class="n">has</span> <span class="n">read</span> <span class="mi">2107</span> <span class="nb">bytes</span> <span class="ow">and</span> <span class="n">written</span> <span class="mi">404</span> <span class="nb">bytes</span>
+<span class="n">Verification</span> <span class="n">error</span><span class="p">:</span> <span class="n">unable</span> <span class="n">to</span> <span class="n">get</span> <span class="n">local</span> <span class="n">issuer</span> <span class="n">certificate</span>
+<span class="o">---</span>
+<span class="n">New</span><span class="p">,</span> <span class="n">TLSv1</span><span class="o">.</span><span class="mi">3</span><span class="p">,</span> <span class="n">Cipher</span> <span class="ow">is</span> <span class="n">TLS_AES_256_GCM_SHA384</span>
+<span class="n">Server</span> <span class="n">public</span> <span class="n">key</span> <span class="ow">is</span> <span class="mi">253</span> <span class="n">bit</span>
+<span class="n">Secure</span> <span class="n">Renegotiation</span> <span class="n">IS</span> <span class="n">NOT</span> <span class="n">supported</span>
+<span class="n">No</span> <span class="n">ALPN</span> <span class="n">negotiated</span>
+<span class="n">Early</span> <span class="n">data</span> <span class="n">was</span> <span class="ow">not</span> <span class="n">sent</span>
+<span class="n">Verify</span> <span class="k">return</span> <span class="n">code</span><span class="p">:</span> <span class="mi">20</span> <span class="p">(</span><span class="n">unable</span> <span class="n">to</span> <span class="n">get</span> <span class="n">local</span> <span class="n">issuer</span> <span class="n">certificate</span><span class="p">)</span>
+<span class="o">---</span>
+<span class="n">DONE</span>
+</pre></div>
+</div>
+<p>サーバ側の優先度はクライアントから指定すれば下位のものも変更できる。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># openssl s_client -connect www:8445 -servername ec.ed25515.example.com -tls1_3 -ciphersuites TLS_CHACHA20_POLY1305_SHA256 &lt; /dev/null</span>
+<span class="o">...</span>
+<span class="o">---</span>
+<span class="n">No</span> <span class="n">client</span> <span class="n">certificate</span> <span class="n">CA</span> <span class="n">names</span> <span class="n">sent</span>
+<span class="n">Peer</span> <span class="n">signature</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Ed25519</span>
+<span class="n">Server</span> <span class="n">Temp</span> <span class="n">Key</span><span class="p">:</span> <span class="n">X25519</span><span class="p">,</span> <span class="mi">253</span> <span class="n">bits</span>
+<span class="o">---</span>
+<span class="n">SSL</span> <span class="n">handshake</span> <span class="n">has</span> <span class="n">read</span> <span class="mi">2107</span> <span class="nb">bytes</span> <span class="ow">and</span> <span class="n">written</span> <span class="mi">404</span> <span class="nb">bytes</span>
+<span class="n">Verification</span> <span class="n">error</span><span class="p">:</span> <span class="n">unable</span> <span class="n">to</span> <span class="n">get</span> <span class="n">local</span> <span class="n">issuer</span> <span class="n">certificate</span>
+<span class="o">---</span>
+<span class="n">New</span><span class="p">,</span> <span class="n">TLSv1</span><span class="o">.</span><span class="mi">3</span><span class="p">,</span> <span class="n">Cipher</span> <span class="ow">is</span> <span class="n">TLS_AES_256_GCM_SHA384</span>
+<span class="n">Server</span> <span class="n">public</span> <span class="n">key</span> <span class="ow">is</span> <span class="mi">253</span> <span class="n">bit</span>
+<span class="n">Secure</span> <span class="n">Renegotiation</span> <span class="n">IS</span> <span class="n">NOT</span> <span class="n">supported</span>
+<span class="n">No</span> <span class="n">ALPN</span> <span class="n">negotiated</span>
+<span class="n">Early</span> <span class="n">data</span> <span class="n">was</span> <span class="ow">not</span> <span class="n">sent</span>
+<span class="n">Verify</span> <span class="k">return</span> <span class="n">code</span><span class="p">:</span> <span class="mi">20</span> <span class="p">(</span><span class="n">unable</span> <span class="n">to</span> <span class="n">get</span> <span class="n">local</span> <span class="n">issuer</span> <span class="n">certificate</span><span class="p">)</span>
+<span class="o">---</span>
+<span class="n">DONE</span>
+</pre></div>
+</div>
+<p>openssl ciphers -v で表示される名前は openssl の通称であって、他のソフトウェアでは通用しない。正式(RFC)な名称との対応は man openssl ciphers で確認するしかなかったが、 1.1.1 から? -stdname というオプションが追加されていた</p>
+<p>オプションが変わっている背景は<a class="reference external" href="https://dev.classmethod.jp/study_meeting/report-tls13-study-201802/">[レポート] TLS 1.3 の標準化動向 #tls13_study ※補足説明付き ｜ DevelopersIO</a>でわかる。鍵交換や認証が外されたから、元の条件式が意味をなさなくなっているのが理由の一つだな。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ . ./common.sh
+$ declare -f is-edwards-enabled-in-client-hello
+....
+$ is-edwards-enabled-in-client-hello ./data/openssl-tls13-success.pcap
+0
+$ is-edwards-enabled-in-client-hello ./data/chrome-tls13-fail.pcap
+1
+</pre></div>
+</div>
+</div>
+<div class="section" id="DyTHW3">
+<span id="id3"></span><h3>盗聴可能＆不可能<a class="headerlink" href="#DyTHW3" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="or">
+<span id="XpOtX1"></span><h3>クライアントで接続可 or 不可が別れる微妙な例<a class="headerlink" href="#or" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ openssl ciphers -v -tls1_2 &#39;kRSA+aRSA+AES256+SHA256&#39;
+AES256-SHA256           TLSv1.2 Kx=RSA      Au=RSA  Enc=AES(256)  Mac=SHA256
+$ man openssl ciphers
+#(AES256-SHA256=TLS_RSA_WITH_AES_256_CBC_SHA256 とわかる)
+</pre></div>
+</div>
+<p>wget は ok</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">ca</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="mi">7443</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>firefox</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ec.ed25519.example.com:8445 への接続中にエラーが発生しました。Cannot communicate securely with peer: no common encryption algorithm(s). エラーコード: SSL_ERROR_NO_CYPHER_OVERLAP 
+</pre></div>
+</div>
+<p>chrome は ng</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>このサイトは安全に接続できません ca.example.com ではサポートされていないプロトコルが使用されています。
+ERR_SSL_VERSION_OR_CIPHER_MISMATCH
+
+このサイトは安全に接続できません ec.ed25519.example.com ではサポートされていないプロトコルが使用されています。
+ERR_SSL_VERSION_OR_CIPHER_MISMATCH
+</pre></div>
+</div>
+<p>以下なら wget / chrome ともに ok</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ openssl ciphers -v -tls1_2 &#39;kRSA+aRSA+AESGCM&#39;
+AES256-GCM-SHA384       TLSv1.2 Kx=RSA      Au=RSA  Enc=AESGCM(256) Mac=AEAD
+AES128-GCM-SHA256       TLSv1.2 Kx=RSA      Au=RSA  Enc=AESGCM(128) Mac=AEAD
+#(AES256-GCM-SHA384=TLS_RSA_WITH_AES_256_GCM_SHA384)
+#(AES128-GCM-SHA256=TLS_RSA_WITH_AES_128_GCM_SHA256)
+</pre></div>
+</div>
+</div>
+<div class="section" id="tcpdump-tshark">
+<span id="slSmG2"></span><h3>tcpdump からの tshark<a class="headerlink" href="#tcpdump-tshark" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo echo &quot;バックグラウンドで tdpdump を実行するのでここで認可させる&quot;
+sudo tcpdump -s 0 -w /tmp/test.pcap -i lo host localhost and port 7443 &amp;
+pid=$!
+curl https://ca.example.com:7443/
+sudo kill -INT $pid
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ssl_handshake_type=$(tshark -r /tmp/test.pcap -T fields -e ssl.handshake.ciphersuite &#39;ssl.handshake.type == 2&#39;)
+ssl_handshake_type_hex=0x00$(echo &quot;obase=16; $ssl_handshake_type&quot; | bc | tr &#39;A-E&#39; &#39;a-e&#39;)
+tshark -r /tmp/test.pcap -V &#39;ssl.handshake.type == 2&#39; | grep $ssl_handshake_type_hex
+</pre></div>
+</div>
+<p>これで TLS_RSA_WITH_AES_256_GCM_SHA384 が使用されていることがわかる</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker exec -it dockerfile_openssl_1 bash
+# tcpdump -s 0 -w /tmp/test.pcap -i eth0 port 8445 &amp;
+# pid=$!
+# openssl s_client -connect www:8445 -servername ec.ed25515.example.com -tls1_3 -ciphersuites TLS_CHACHA20_POLY1305_SHA256 &lt; /dev/null
+# kill -INT $pid
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ssl_handshake_type=$(tshark -r /tmp/test.pcap -T fields -e ssl.handshake.ciphersuite &#39;ssl.handshake.type == 2&#39;)
+ssl_handshake_type_hex=0x00$(echo &quot;obase=16; $ssl_handshake_type&quot; | bc | tr &#39;A-E&#39; &#39;a-e&#39;)
+tshark -r /tmp/test.pcap -V &#39;ssl.handshake.type == 2&#39; | grep $ssl_handshake_type_hex
+</pre></div>
+</div>
+</div>
+<div class="section" id="tls">
+<span id="vmq0x"></span><h3>tls 復号<a class="headerlink" href="#tls" title="Permalink to this headline">¶</a></h3>
+<p>復号可能なら html の内容を表示できる</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tshark</span> <span class="o">-</span><span class="n">r</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">pcap</span> <span class="o">-</span><span class="n">o</span> <span class="n">ssl</span><span class="o">.</span><span class="n">keys_list</span><span class="p">:</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span><span class="s2">&quot;443&quot;</span><span class="p">,</span><span class="s2">&quot;http&quot;</span><span class="p">,</span><span class="o">./</span><span class="n">ca</span><span class="o">/</span><span class="n">server</span><span class="o">-</span><span class="n">ca</span><span class="o">-</span><span class="mi">2</span><span class="o">/</span><span class="n">certs</span><span class="o">/</span><span class="n">ca</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">key</span><span class="o">-</span><span class="n">nopass</span><span class="o">.</span><span class="n">pem</span> <span class="o">-</span><span class="n">o</span> <span class="n">ssl</span><span class="o">.</span><span class="n">debug_file</span><span class="p">:</span><span class="s2">&quot;ssl-debug.log&quot;</span> <span class="o">-</span><span class="n">V</span> <span class="o">-</span><span class="n">Y</span> <span class="n">http</span>
+</pre></div>
+</div>
+<p>日本語がコードで表示されていたり、[truncated]　と表示されたりするのは tshark 側?</p>
+</div>
+</div>
+<div class="section" id="tshark">
+<span id="Ohxyb4"></span><h2>tshark の出力とテスト<a class="headerlink" href="#tshark" title="Permalink to this headline">¶</a></h2>
+<p>必要な部分をピンポイントで取り出すことができるのでテストを動かすときにはよいが、テストを作るときには意味の説明がないので厳しいな。
+テストを作るときには wireshark でフィールドを確認して、tshark の値をテストに組み込む感じかな。 これはテストコードを読めばわかるようなものではないので、 server hello(ssl.handshake.ciphresuite == 2) の ssl.handshake.ciphersuite は Cipher Suite: TLS_RSA_WITH_AES_256_GCM_SHA384 = 0x009d = 157 であることとか書かないといけないな。wireshark から該当情報選んでコンテキストメニュー/コピー/全ての見えている選択されたツリー項目 でコピーできる</p>
+<p>これをやらずに tshark の検索式を作ったりすることは不可能だな。</p>
+<ul class="simple">
+<li>RFC や ggrks でプロトコル仕様上の参照すべき情報を確認する</li>
+<li>コマンド動作させてキャプチャする</li>
+<li>wireshark で参照すべき情報を含むパケットを見つける</li>
+<li>参照すべき情報をポイントし、表示される属性名を確認する</li>
+<li>パケットを特定するフィルタと出力データを考案する</li>
+<li>フィルタの確認</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wireshark</span> <span class="o">-</span><span class="n">Y</span> <span class="s2">&quot;ssl.handshake.type == 2&quot;</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">pcap</span>
+<span class="n">tshark</span> <span class="o">-</span><span class="n">r</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">pcap</span> <span class="o">-</span><span class="n">V</span> <span class="s1">&#39;ssl.handshake.type == 2&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tls1-2-sslv3">
+<span id="7K8M22"></span><h2>これどういう意味なんだ? tls1_2 指定なのに sslv3 とは…<a class="headerlink" href="#tls1-2-sslv3" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ openssl ciphers -v -tls1_2 &#39;kRSA+aRSA+AES256+SHA&#39;
+AES256-SHA              SSLv3 Kx=RSA      Au=RSA  Enc=AES(256)  Mac=SHA1
+</pre></div>
+</div>
+</div>
+<div class="section" id="yGm2z">
+<span id="id4"></span><h2>cipher suite<a class="headerlink" href="#yGm2z" title="Permalink to this headline">¶</a></h2>
+<p>今の所これ選んでおけば? なもの</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ openssl ciphers -v -tls1_3 &#39;kECDHE+aECDSA+CHACHA20&#39;
+TLS_AES_256_GCM_SHA384  TLSv1.3 Kx=any      Au=any  Enc=AESGCM(256) Mac=AEAD
+TLS_CHACHA20_POLY1305_SHA256 TLSv1.3 Kx=any      Au=any  Enc=CHACHA20/POLY1305(256) Mac=AEAD
+TLS_AES_128_GCM_SHA256  TLSv1.3 Kx=any      Au=any  Enc=AESGCM(128) Mac=AEAD
+ECDHE-ECDSA-CHACHA20-POLY1305 TLSv1.2 Kx=ECDH     Au=ECDSA Enc=CHACHA20/POLY1305(256) Mac=AEAD
+</pre></div>
+</div>
+<p>openssl 1.1.1 でないと、 1.3 の TLS* はでない。</p>
+</div>
+<div class="section" id="chrome-cipher-suite">
+<span id="ezMdG3"></span><h2>chrome の cipher suite 設定<a class="headerlink" href="#chrome-cipher-suite" title="Permalink to this headline">¶</a></h2>
+<p>ブラックリスト指定できる</p>
+<p><a class="reference external" href="https://tosi-tech.net/2014/07/ssl-argorithm-config-on-chrome/">Google ChromeのSSL/TLS暗号化アルゴリズム設定</a></p>
+</div>
+<div class="section" id="wireshark">
+<span id="xvtrh2"></span><h2>wireshark のヘルプ<a class="headerlink" href="#wireshark" title="Permalink to this headline">¶</a></h2>
+<p>提示される TLS メッセージタイプの検索式がおかしい。GUI で人が目で見るから気にされない領域になってくると、ヘルプがおかしいのかもしれない。</p>
+<p><img alt="タイプの説明がおかしい" src="_images/2019-03-10T20-41-55.png" /></p>
+</div>
+<div class="section" id="squid-bumping">
+<span id="1UeAF"></span><h2>squid bumping<a class="headerlink" href="#squid-bumping" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SSL</span> <span class="n">Bump</span> <span class="n">does</span> <span class="n">Man</span><span class="o">-</span><span class="n">In</span><span class="o">-</span><span class="n">The</span><span class="o">-</span><span class="n">Middle</span> <span class="n">attack</span> <span class="n">on</span> <span class="n">the</span> <span class="n">HTTPS</span> <span class="n">connections</span> <span class="n">when</span> <span class="n">Squid</span> <span class="n">contacts</span> <span class="n">remote</span> <span class="n">HTTPS</span> <span class="n">server</span> <span class="n">on</span> <span class="n">your</span> <span class="n">behalf</span> <span class="ow">and</span> <span class="n">then</span> <span class="n">mimics</span> <span class="n">secure</span> <span class="n">connection</span> <span class="n">by</span> <span class="n">faking</span> <span class="n">the</span> <span class="n">remote</span> <span class="n">site</span> <span class="n">certificate</span> <span class="ow">and</span> <span class="n">signing</span> <span class="n">it</span> <span class="k">with</span> <span class="n">the</span> <span class="n">configured</span> <span class="bp">self</span> <span class="n">sign</span> <span class="n">root</span> <span class="n">key</span><span class="o">.</span> <span class="n">You</span> <span class="n">also</span> <span class="n">must</span> <span class="n">install</span> <span class="n">this</span> <span class="bp">self</span> <span class="n">signed</span> <span class="n">root</span> <span class="n">certificate</span> <span class="k">as</span> <span class="n">trusted</span> <span class="ow">in</span> <span class="nb">all</span> <span class="n">your</span> <span class="n">browsers</span><span class="o">.</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://serverfault.com/questions/649976/squid3-ssl-bumping-server-first-with-signed-certificate">squid3 ssl bumping server-first with signed certificate</a></p>
+<blockquote>
+<div>1 In order to do the SSL Bump you must be using a self signed root certificate file. The one you mentioned from Comodo will never work.</div></blockquote>
+<p>root じゃないとダメってまじかよ? これに反する材料は見つからなかった。</p>
+<p>proxy_1  | FATAL: No valid signing SSL certificate configured for HTTP_port [::]:3128</p>
+<p>特に自己署名でなくても復号できた。 squid コンテナは bump が有効になっていたが(ubuntu 等の squid は無効)、squid 証明書データベースを初期化したり、証明書のパーミッションを設定したりでイメージを作る必要がある。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run -it -v $(pwd):/opt/toyca openssl-tls1_3
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span>
+
+<span class="p">(</span><span class="n">別コンソールで実行</span><span class="p">)</span>
+<span class="n">export</span> <span class="n">https_proxy</span><span class="o">=</span><span class="n">localhost</span><span class="p">:</span><span class="mi">3128</span>
+<span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">com</span>
+</pre></div>
+</div>
+<p>kali の squid は 4?</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">squid</span> <span class="o">-</span><span class="n">v</span> <span class="o">|</span> <span class="n">grep</span> <span class="n">crtd</span>
+</pre></div>
+</div>
+<p>–enable-ssl-crtd が必要。入ってない…コンテナは入っているのね</p>
+<p>tls-cert PEM
+tls-key</p>
+<ul class="simple">
+<li>bundle?</li>
+<li>DER?</li>
+<li>root?</li>
+<li>extension?</li>
+</ul>
+<p>(Help getting Squid 3.4 Transparent Proxy to Work)[https://squid-users.squid-cache.narkive.com/xo5G8ghQ/help-getting-squid-3-4-transparent-proxy-to-work]</p>
+</div>
+<div class="section" id="k7Tog">
+<span id="id5"></span><h2>参考<a class="headerlink" href="#k7Tog" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://www.cdnetworks.co.jp/blog/6516/">cipher suite の設定例</a></li>
+<li><a class="reference external" href="http://kikumoto.hatenablog.com/entry/2016/06/04/124922">TLS1.2が使えない環境のためのProxy (squid)設定</a><ul>
+<li>透過 squid</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="tls-1-3">
+<span id="Af4m8"></span><h2>TLS 1.3<a class="headerlink" href="#tls-1-3" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://gato.intaa.net/archives/12813">ウェブサーバのTLS ChaCha20-Poly1305で通信させたい</a><ul>
+<li>ECDHE-ECDSA-CHACHA20-POLY1305</li>
+<li>は追加したいな</li>
+</ul>
+</li>
+<li><a class="reference external" href="https://jovi0608.hatenablog.com/entry/2018/05/09/213703">「SSL/TLS暗号設定ガイドライン 第2.0版」を読んで</a></li>
+<li><a class="reference external" href="https://dev.classmethod.jp/study_meeting/report-tls13-study-201802/">[レポート] TLS 1.3 の標準化動向 #tls13_study ※補足説明付き</a></li>
+<li><a class="reference external" href="https://blog.bejarano.io/enabling-tls13-support-in-nginx.html">Enabling TLS 1.3 support in nginx</a><ul>
+<li>nginx 1.13.0 or higher</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nginx</span> <span class="o">-</span><span class="n">v</span>
+</pre></div>
+</div>
+<p>TLS1.3 な nginx に</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="o">--</span><span class="n">version</span>
+<span class="c1"># openssl のバージョンはなく、1.19.4 であることだけしかわからない。</span>
+
+<span class="n">curl</span> <span class="o">--</span><span class="n">version</span> 
+<span class="n">curl</span> <span class="mf">7.58</span><span class="o">.</span><span class="mi">0</span> <span class="p">(</span><span class="n">x86_64</span><span class="o">-</span><span class="n">pc</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="p">)</span> <span class="n">libcurl</span><span class="o">/</span><span class="mf">7.58</span><span class="o">.</span><span class="mi">0</span> <span class="n">OpenSSL</span><span class="o">/</span><span class="mf">1.1</span><span class="o">.</span><span class="mi">0</span><span class="n">g</span> <span class="n">zlib</span><span class="o">/</span><span class="mf">1.2</span><span class="o">.</span><span class="mi">11</span> <span class="n">libidn2</span><span class="o">/</span><span class="mf">2.0</span><span class="o">.</span><span class="mi">4</span> <span class="n">libpsl</span><span class="o">/</span><span class="mf">0.19</span><span class="o">.</span><span class="mi">1</span> <span class="p">(</span><span class="o">+</span><span class="n">libidn2</span><span class="o">/</span><span class="mf">2.0</span><span class="o">.</span><span class="mi">4</span><span class="p">)</span> <span class="n">nghttp2</span><span class="o">/</span><span class="mf">1.30</span><span class="o">.</span><span class="mi">0</span> <span class="n">librtmp</span><span class="o">/</span><span class="mf">2.3</span>
+<span class="n">Release</span><span class="o">-</span><span class="n">Date</span><span class="p">:</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">24</span>
+<span class="n">Protocols</span><span class="p">:</span> <span class="nb">dict</span> <span class="n">file</span> <span class="n">ftp</span> <span class="n">ftps</span> <span class="n">gopher</span> <span class="n">http</span> <span class="n">https</span> <span class="n">imap</span> <span class="n">imaps</span> <span class="n">ldap</span> <span class="n">ldaps</span> <span class="n">pop3</span> <span class="n">pop3s</span> <span class="n">rtmp</span> <span class="n">rtsp</span> <span class="n">smb</span> <span class="n">smbs</span> <span class="n">smtp</span> <span class="n">smtps</span> <span class="n">telnet</span> <span class="n">tftp</span> 
+<span class="n">Features</span><span class="p">:</span> <span class="n">AsynchDNS</span> <span class="n">IDN</span> <span class="n">IPv6</span> <span class="n">Largefile</span> <span class="n">GSS</span><span class="o">-</span><span class="n">API</span> <span class="n">Kerberos</span> <span class="n">SPNEGO</span> <span class="n">NTLM</span> <span class="n">NTLM_WB</span> <span class="n">SSL</span> <span class="n">libz</span> <span class="n">TLS</span><span class="o">-</span><span class="n">SRP</span> <span class="n">HTTP2</span> <span class="n">UnixSockets</span> <span class="n">HTTPS</span><span class="o">-</span><span class="n">proxy</span> <span class="n">PSL</span> 
+</pre></div>
+</div>
+<p>指定した ssl_ciphers に対応する suite が存在しない</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">www_1</span>      <span class="o">|</span> <span class="n">nginx</span><span class="p">:</span> <span class="p">[</span><span class="n">emerg</span><span class="p">]</span> <span class="n">SSL_CTX_set_cipher_list</span><span class="p">(</span><span class="s2">&quot;TLSv1.3+CHACHA20&quot;</span><span class="p">)</span> <span class="n">failed</span> <span class="p">(</span><span class="n">SSL</span><span class="p">:</span> <span class="n">error</span><span class="p">:</span><span class="mi">1410</span><span class="n">D0B9</span><span class="p">:</span><span class="n">SSL</span> <span class="n">routines</span><span class="p">:</span><span class="n">SSL_CTX_set_cipher_list</span><span class="p">:</span><span class="n">no</span> <span class="n">cipher</span> <span class="n">match</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">OpenSSL</span><span class="p">:</span> <span class="n">error</span><span class="p">:</span><span class="mi">1409442</span><span class="n">E</span><span class="p">:</span><span class="n">SSL</span> <span class="n">routines</span><span class="p">:</span><span class="n">ssl3_read_bytes</span><span class="p">:</span><span class="n">tlsv1</span> <span class="n">alert</span> <span class="n">protocol</span> <span class="n">version</span>
+</pre></div>
+</div>
+<p>chrome のエラー</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ca.example.com ではサポートされていないプロトコルが使用されています。
+ERR_SSL_VERSION_OR_CIPHER_MISMATCH
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ca.example.com では、悪意のあるユーザーによって、パスワード、メッセージ、クレジット カードなどの情報が盗まれる可能性があります。詳細
+NET::ERR_CERT_COMMON_NAME_INVALID
+</pre></div>
+</div>
+<p>EdSA 秘密鍵</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">openssl</span> <span class="n">genpkey</span> <span class="o">-</span><span class="n">algorithm</span> <span class="n">ED25519</span> <span class="o">-</span><span class="n">out</span> <span class="n">秘密鍵ファイル名</span><span class="o">.</span><span class="n">pem</span>
+<span class="n">openssl</span> <span class="n">genpkey</span> <span class="o">-</span><span class="n">algorithm</span> <span class="n">ED448</span> <span class="o">-</span><span class="n">out</span> <span class="n">秘密鍵ファイル名</span><span class="o">.</span><span class="n">pem</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><a class="reference external" href="https://msol.io/blog/tech/create-a-self-signed-ecc-certificate/">Create a self-signed ECC certificate</a><ul>
+<li>ecc は証明書が作成できる</li>
+</ul>
+</li>
+</ul>
+<p>TLS 1.2 までの openssl で TLS 1.3 なサーバにアクセスした場合</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ openssl s_client -connect www -servername ec.ed25519.example.com:8445
+CONNECTED(00000003)
+140175286837696:error:1409442E:SSL routines:ssl3_read_bytes:tlsv1 alert protocol version:../ssl/record/rec_layer_s3.c:1399:SSL alert number 70
+---
+no peer certificate available
+---
+No client certificate CA names sent
+---
+SSL handshake has read 7 bytes and written 176 bytes
+Verification: OK
+---
+New, (NONE), Cipher is (NONE)
+Secure Renegotiation IS NOT supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1.2
+    Cipher    : 0000
+    Session-ID: 
+    Session-ID-ctx: 
+    Master-Key: 
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    Start Time: 1554619947
+    Timeout   : 7200 (sec)
+    Verify return code: 0 (ok)
+    Extended master secret: no
+---
+</pre></div>
+</div>
+</div>
+<div class="section" id="nginx">
+<span id="DmmO61"></span><h2>nginx エラー<a class="headerlink" href="#nginx" title="Permalink to this headline">¶</a></h2>
+<p>こういうのがでない</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">www_1</span>      <span class="o">|</span> <span class="mi">2019</span><span class="o">/</span><span class="mi">03</span><span class="o">/</span><span class="mi">15</span> <span class="mi">06</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">46</span> <span class="p">[</span><span class="n">emerg</span><span class="p">]</span> <span class="mi">1</span><span class="c1">#1: cannot load certificate &quot;/etc/ssl/toyca/server-ca-2/certs/ca.example.com/cert-im.pem&quot;: BIO_new_file() failed (SSL: error:02001002:system library:fopen:No such file or directory:fopen(&#39;/etc/ssl/toyca/server-ca-2/certs/ca.example.com/cert-im.pem&#39;,&#39;r&#39;) error:2006D080:BIO routines:BIO_new_file:no such file)</span>
+<span class="n">www_1</span>      <span class="o">|</span> <span class="n">nginx</span><span class="p">:</span> <span class="p">[</span><span class="n">emerg</span><span class="p">]</span> <span class="n">cannot</span> <span class="n">load</span> <span class="n">certificate</span> <span class="s2">&quot;/etc/ssl/toyca/server-ca-2/certs/ca.example.com/cert-im.pem&quot;</span><span class="p">:</span> <span class="n">BIO_new_file</span><span class="p">()</span> <span class="n">failed</span> <span class="p">(</span><span class="n">SSL</span><span class="p">:</span> <span class="n">error</span><span class="p">:</span><span class="mi">02001002</span><span class="p">:</span><span class="n">system</span> <span class="n">library</span><span class="p">:</span><span class="n">fopen</span><span class="p">:</span><span class="n">No</span> <span class="n">such</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">directory</span><span class="p">:</span><span class="n">fopen</span><span class="p">(</span><span class="s1">&#39;/etc/ssl/toyca/server-ca-2/certs/ca.example.com/cert-im.pem&#39;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="n">error</span><span class="p">:</span><span class="mi">2006</span><span class="n">D080</span><span class="p">:</span><span class="n">BIO</span> <span class="n">routines</span><span class="p">:</span><span class="n">BIO_new_file</span><span class="p">:</span><span class="n">no</span> <span class="n">such</span> <span class="n">file</span><span class="p">)</span>
+<span class="n">www_1</span>      <span class="o">|</span> <span class="mi">2019</span><span class="o">/</span><span class="mi">03</span><span class="o">/</span><span class="mi">15</span> <span class="mi">06</span><span class="p">:</span><span class="mi">19</span><span class="p">:</span><span class="mi">13</span> <span class="p">[</span><span class="n">emerg</span><span class="p">]</span> <span class="mi">1</span><span class="c1">#1: cannot load certificate key &quot;/etc/ssl/toyca/server-ca-2/certs/ca.example.com/key-nopass.pem&quot;: BIO_new_file() failed (SSL: error:02001002:system library:fopen:No such file or directory:fopen(&#39;/etc/ssl/toyca/server-ca-2/certs/ca.example.com/key-nopass.pem&#39;,&#39;r&#39;) error:2006D080:BIO routines:BIO_new_file:no such file)</span>
+</pre></div>
+</div>
+<div class="section" id="go-ed25519">
+<span id="1qWW13"></span><h3>go で　ed25519 を使う<a class="headerlink" href="#go-ed25519" title="Permalink to this headline">¶</a></h3>
+<p>./data/asn.go
+caddy で ed25519 証明書をロード使用したらエラーになったので、証明書フォーマットがあっているか確認してみただけ。</p>
+</div>
+<div class="section" id="nginx-conf">
+<span id="Y3Pho"></span><h3>nginx.conf 設定変えた場合<a class="headerlink" href="#nginx-conf" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">ca</span><span class="o">.</span><span class="n">sh</span> <span class="n">gen_nginx_conf</span>
+<span class="n">docker</span> <span class="n">restart</span> <span class="n">dockerfile_www_1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="http-3-quic-tls-1-3">
+<span id="kfFJ41"></span><h3>HTTP/3, QUIC, TLS 1.3<a class="headerlink" href="#http-3-quic-tls-1-3" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/quicwg/base-drafts/wiki/Implementations">Implementations · quicwg/base-drafts Wiki</a> では caddy 0.9 について GQUIC と表記されている。 caddy 0.11.5 は TLS1.3 には対応したが、 <a class="reference external" href="https://caddyserver.com/docs/tls">tls - Caddy User Guide</a> wireshark では protocol が GQUIC となっている。 IQUIC には未対応? chrome が GQUIC を優先している?</li>
+</ul>
+</div>
+<div class="section" id="ed25519-openssl">
+<span id="YWcEc3"></span><h3>ed25519 に対応していない openssl<a class="headerlink" href="#ed25519-openssl" title="Permalink to this headline">¶</a></h3>
+<p>証明書を表示させようとするとエラーになる</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mo@asus:~/src/toyca$ openssl x509 -text -in ca/server-ca-2/certs/ec.ed25519.example.com/cert-im.pem 
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1552630567 (0x5c8b4327)
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: O = ToyCA, CN = server-ca-2
+        Validity
+            Not Before: Mar  1 00:00:00 2018 GMT
+            Not After : Mar  1 00:00:00 2020 GMT
+        Subject: CN = ec.ed25519.example.com
+        Subject Public Key Info:
+            Public Key Algorithm: 1.3.101.112
+            Unable to load Public Key
+140270692323776:error:0609E09C:digital envelope routines:pkey_set_type:unsupported algorithm:../crypto/evp/p_lib.c:206:
+140270692323776:error:0B09406F:x509 certificate routines:x509_pubkey_decode:unsupported algorithm:../crypto/x509/x_pubkey.c:113:
+</pre></div>
+</div>
+<p>対応している場合</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># openssl x509 -text -in ca/server-ca-2/certs/ec.ed25519.example.com/cert.pem </span>
+<span class="n">Certificate</span><span class="p">:</span>
+    <span class="n">Data</span><span class="p">:</span>
+        <span class="n">Version</span><span class="p">:</span> <span class="mi">3</span> <span class="p">(</span><span class="mh">0x2</span><span class="p">)</span>
+        <span class="n">Serial</span> <span class="n">Number</span><span class="p">:</span> <span class="mi">1552630567</span> <span class="p">(</span><span class="mh">0x5c8b4327</span><span class="p">)</span>
+        <span class="n">Signature</span> <span class="n">Algorithm</span><span class="p">:</span> <span class="n">sha256WithRSAEncryption</span>
+        <span class="n">Issuer</span><span class="p">:</span> <span class="n">O</span> <span class="o">=</span> <span class="n">ToyCA</span><span class="p">,</span> <span class="n">CN</span> <span class="o">=</span> <span class="n">server</span><span class="o">-</span><span class="n">ca</span><span class="o">-</span><span class="mi">2</span>
+        <span class="n">Validity</span>
+            <span class="n">Not</span> <span class="n">Before</span><span class="p">:</span> <span class="n">Mar</span>  <span class="mi">1</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="mi">2018</span> <span class="n">GMT</span>
+            <span class="n">Not</span> <span class="n">After</span> <span class="p">:</span> <span class="n">Mar</span>  <span class="mi">1</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="mi">2020</span> <span class="n">GMT</span>
+        <span class="n">Subject</span><span class="p">:</span> <span class="n">CN</span> <span class="o">=</span> <span class="n">ec</span><span class="o">.</span><span class="n">ed25519</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+        <span class="n">Subject</span> <span class="n">Public</span> <span class="n">Key</span> <span class="n">Info</span><span class="p">:</span>
+            <span class="n">Public</span> <span class="n">Key</span> <span class="n">Algorithm</span><span class="p">:</span> <span class="n">ED25519</span>
+                <span class="n">ED25519</span> <span class="n">Public</span><span class="o">-</span><span class="n">Key</span><span class="p">:</span>
+                <span class="n">pub</span><span class="p">:</span>
+                    <span class="mi">73</span><span class="p">:</span><span class="mi">3</span><span class="n">c</span><span class="p">:</span><span class="mi">7</span><span class="n">f</span><span class="p">:</span><span class="mi">0</span><span class="n">b</span><span class="p">:</span><span class="n">dd</span><span class="p">:</span><span class="mi">76</span><span class="p">:</span><span class="mi">17</span><span class="p">:</span><span class="n">c4</span><span class="p">:</span><span class="mi">40</span><span class="p">:</span><span class="mi">82</span><span class="p">:</span><span class="mi">06</span><span class="p">:</span><span class="n">ae</span><span class="p">:</span><span class="n">c8</span><span class="p">:</span><span class="n">c5</span><span class="p">:</span><span class="n">bb</span><span class="p">:</span>
+                    <span class="n">b3</span><span class="p">:</span><span class="mi">11</span><span class="p">:</span><span class="mi">78</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span><span class="n">d7</span><span class="p">:</span><span class="mi">8</span><span class="n">c</span><span class="p">:</span><span class="mi">8</span><span class="n">c</span><span class="p">:</span><span class="n">a4</span><span class="p">:</span><span class="n">c8</span><span class="p">:</span><span class="mi">1</span><span class="n">c</span><span class="p">:</span><span class="mi">2</span><span class="n">f</span><span class="p">:</span><span class="n">e4</span><span class="p">:</span><span class="n">f8</span><span class="p">:</span><span class="n">ff</span><span class="p">:</span>
+                    <span class="n">ee</span><span class="p">:</span><span class="mi">8</span><span class="n">f</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="gV6cP1">
+<span id="id6"></span><h3>tls 1.3 / ブラウザ<a class="headerlink" href="#gV6cP1" title="Permalink to this headline">¶</a></h3>
+<p>openssl s_client からは 1.3 でアクセスできるのに、ブラウザからではだめ?
+chrome と firefox はすでに対応済みだから普通にアクセスできると思ったし、 <a class="reference external" href="https://www.ssllabs.com/ssltest/viewMyClient.html">SSL Client Test</a>もサポートしていると表示される</p>
+<p>ブラウザからの送信時、 client hello の時点で Protocl が TLSv1.2 と wireshark に判定されている
+Extension supported_versions で TLS 1.3 は入っている
+cipher suites に 1.3 のスイートは入っている</p>
+<ul class="simple">
+<li>supported_groups<ul>
+<li>ng<ul>
+<li>grease</li>
+<li>x25519</li>
+<li>secp256r1</li>
+<li>secp384r1</li>
+</ul>
+</li>
+<li>ok<ul>
+<li>x25519</li>
+<li>x448</li>
+<li>secp521r1</li>
+<li>secp384r1</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ec_point_formats</li>
+<li>application_layer_protocol_negotiation</li>
+<li>signature_algorithms<ul>
+<li>ng<ul>
+<li>ecdsa_secp256r1_sha256</li>
+<li>rsa_pss_rsae_sha256</li>
+<li>rsa_pkcs1_sha256</li>
+<li>ecdsa_secp384r1_sha384</li>
+<li>rsa_pss_rsae_sha384</li>
+<li>rsa_pkcs1_sha384</li>
+<li>rsa_pss_rsae_sha512</li>
+<li>rsa_pkcs1_sha512</li>
+<li>rsa_pkcs1_sha1</li>
+</ul>
+</li>
+<li>ok<ul>
+<li>ecdsa_secp256r1_sha256</li>
+<li>ecdsa_secp384r1_sha384</li>
+<li>ecdsa_secp521r1_sha521</li>
+<li><strong>ed25519</strong></li>
+<li><strong>ed448</strong></li>
+<li>rsa_pss_pss_sha256</li>
+<li>rsa_pss_pss_sha384</li>
+<li>rsa_pss_pss_sha512</li>
+<li>rsa_pss_rsae_sha256</li>
+<li>rsa_pss_rsae_sha384</li>
+<li>rsa_pss_rsae_sha512</li>
+<li>rsa_pkcs1_sha256</li>
+<li>rsa_pkcs1_sha384</li>
+<li>rsa_pkcs1_sha512</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>supported_versions<ul>
+<li>ng<ul>
+<li>1.3</li>
+<li>1.2</li>
+</ul>
+</li>
+<li>ok<ul>
+<li>1.3</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>key_share<ul>
+<li>ng<ul>
+<li>x25519</li>
+</ul>
+</li>
+<li>ok<ul>
+<li>x25519</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="caddy-ed25519-golang">
+<span id="xJ5ch1"></span><h3>caddy/ed25519/golang<a class="headerlink" href="#caddy-ed25519-golang" title="Permalink to this headline">¶</a></h3>
+<p>go get golang.org/x/crypto/ed25519</p>
+</div>
+<div class="section" id="k7Tog">
+<span id="id7"></span><h3>参考<a class="headerlink" href="#k7Tog" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/chromium/badssl.com">chromium/badssl.com: Memorable site for testing clients against bad SSL configs.</a><ul>
+<li>エラーとかテスト観点とか参考になりそう。 web trust な ca の協力得ているのは真似出来ないが</li>
+</ul>
+</li>
+<li><a class="reference external" href="https://www.gleas.jp/wp-content/uploads/2015/06/GleasWhitepaper_1509_OCSPResponder.pdf">OpenCA-OCSPDでのOCSPレスポンダー設定手順</a><ul>
+<li>ocspd の設定ファイルのパスとか。</li>
+<li>crl ファイル複数指定できないだろか</li>
+</ul>
+</li>
+<li><a class="reference external" href="https://hub.docker.com/r/mattbodholdt/openca-ocspd">mattbodholdt/openca-ocspd - Docker Hub</a><ul>
+<li>DL多いので信用</li>
+</ul>
+</li>
+<li><a class="reference external" href="https://github.com/abiosoft/caddy-docker">abiosoft/caddy-docker: Docker container for Caddy</a><ul>
+<li>DL多いので信用</li>
+</ul>
+</li>
+<li><a class="reference external" href="https://www.wolfssl.jp/wolfblog/2018/06/01/tls-1-3performance2/">TLS 1.3の性能 その2 – フルハンドシェイク - wolfSSL</a><ul>
+<li>詳しい</li>
+</ul>
+</li>
+<li></li>
+<li><a class="reference external" href="https://qiita.com/sylph01/items/3bf7bc2d42da4e0efb37">TLS 1.3 Overview - Qiita</a><ul>
+<li>client hello のバージョン指定が 1.2 のままで cipher suites で指定するとか、知って置かないとトラブルシュートで混乱する話</li>
+<li></li>
+</ul>
+</li>
+<li><a class="reference external" href="https://http2.try-and-test.net/ecdhe.html#performance">暗号スイートの暗号強度と、公開鍵のビット数の設定、及びRSAとECDHEでサーバ負荷の比較 - Apache 2.4系でHTTP/2対応サーバを構築してみるテスト。</a><ul>
+<li>かなり詳しいサイト</li>
+<li>本出たら買うレベル</li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 </div>

@@ -80,6 +80,7 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="00-setup.html">インストール</a></li>
 <li class="toctree-l1"><a class="reference internal" href="01.html">方針</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">その他</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#vfQTy">テスト</a><ul>
@@ -207,7 +208,7 @@ cert-im.pem  cert.pem  key-nopass.pem  key.pem  pkcs12.pfx  req.pem
 </ul>
 </li>
 <li>key.pem<ul>
-<li>暗号化された秘密鍵</li>
+<li>aes256 で暗号化された秘密鍵</li>
 </ul>
 </li>
 <li>cert.pem<ul>
@@ -350,7 +351,10 @@ MyApp.exe
 </div>
 <div class="section" id="revoke">
 <span id="doAga"></span><h2>revoke<a class="headerlink" href="#revoke" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>CA -revoke &quot;$cert&quot; -passin file:$PASS
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>. ./ca.sh
+ca=&quot;choroi-ca-1&quot;
+cert=./ca/$CA/certs/$serial-$cn/cert.pem
+$CA -revoke &quot;$cert&quot; -passin file:$PASS
 </pre></div>
 </div>
 </div>
