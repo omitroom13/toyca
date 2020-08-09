@@ -44,7 +44,6 @@ _ReSharper*/
 
 #sphinx
 _build
-_static
 _templates
 doc/build/doctrees
 
