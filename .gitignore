@@ -1,7 +1,6 @@
 www
 ca
 nginx.conf
-index.html
 test.sh
 *.old
 
