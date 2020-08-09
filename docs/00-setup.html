@@ -1,0 +1,665 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ja" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ja" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>インストール &mdash; ToyCA  ドキュメント</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="方針" href="01.html" />
+    <link rel="prev" title="ToyCA - 検証用認証局" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ToyCA
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">インストール</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">動作環境</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">諸々生成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">ホストの設定</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">認証局証明書</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ip">IPアドレス・ホスト名</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#lxd">lxd</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id6">コンテナ設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#litespeed">litespeed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#litespeed-ssl">litespeed ssl 設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#http-3">http/3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#curl">curl</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#ocsp">OCSP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#gh-pages">gh-pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01.html">方針</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02.html">その他</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03.html">参考文献・メモ</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ToyCA</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>インストール</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/00-setup.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>インストール<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="id2">
+<h2>動作環境<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>ubuntu</p>
+<ul>
+<li><p>git</p></li>
+<li><p>openssl</p></li>
+<li><p>shunit2</p></li>
+</ul>
+</li>
+<li><p>Docker</p></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>諸々生成<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">library</span><span class="o">/</span><span class="n">nginx</span><span class="p">:</span><span class="n">alpine</span>
+<span class="n">docker</span> <span class="n">pull</span> <span class="n">abiosoft</span><span class="o">/</span><span class="n">caddy</span>
+<span class="n">docker</span> <span class="n">pull</span> <span class="n">mattbodholdt</span><span class="o">/</span><span class="n">openca</span><span class="o">-</span><span class="n">ocspd</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">omitroom13</span><span class="o">/</span><span class="n">toyca</span>
+<span class="n">cd</span> <span class="n">toyca</span>
+</pre></div>
+</div>
+<p>library/nginx(debian ビルドされている)での openssl バージョンは 1.1.0j だった、 alpine の方は 1.1.1b になっている。 TLS 1.3 や ED25519 のテストのためにこちらを使う。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run abiosoft/caddy -version
+Caddy 0.11.5 (unofficial)
+$ docker run library/nginx:alpine nginx -V
+nginx version: nginx/1.15.10
+built by gcc 8.2.0 (Alpine 8.2.0) 
+built with OpenSSL 1.1.1b  26 Feb 2019
+TLS SNI support enabled
+configure arguments: --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=nginx --group=nginx --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-http_xslt_module=dynamic --with-http_image_filter_module=dynamic --with-http_geoip_module=dynamic --with-threads --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-stream_realip_module --with-stream_geoip_module=dynamic --with-http_slice_module --with-mail --with-mail_ssl_module --with-compat --with-file-aio --with-http_v2_module
+$ google-chrome --version
+Google Chrome 73.0.3683.103 
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo chown -R $(id -u):$(id -g) .
+docker build -f Dockerfile/squid -t squid-bump .
+docker build -f Dockerfile/openssl -t openssl-tls1_3 .
+docker build -f Dockerfile/sphinx -t sphinx .
+</pre></div>
+</div>
+<p>ドキュメント生成。 Sphinx が必要</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run -it -v $(pwd):/opt/toyca sphinx
+
+pushd doc
+mkdir _static
+make html
+popd
+</pre></div>
+</div>
+<p>デモ用CAの生成</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run -it -v $(pwd):/opt/toyca openssl-tls1_3
+./ca.sh clean
+./ca.sh create_both
+
+sudo chown -R $(id -u):$(id -g) .
+ca=&quot;server-ca-2&quot;
+cn=&quot;ec.P-256.example.com&quot;
+san=&quot;DNS:${cn}&quot;
+PKEY_ALG=EC
+PKEY_PARAM=&quot;ec_paramgen_curve:P-256 ec_param_enc:named_curve&quot;
+./ca.sh gen_cert_server &quot;$ca&quot; &quot;$cn&quot; &quot;$san&quot; &quot;$PKEY_ALG&quot; &quot;$PKEY_PARAM&quot;
+
+ca=&quot;server-ca-1&quot;
+cn=&quot;ocsp.example.com&quot;
+san=&quot;DNS:${cn}&quot;
+PKEY_ALG=rsa
+PKEY_PARAM=&quot;rsa_keygen_bits:2048&quot;
+./ca.sh gen_cert_ocsp &quot;$ca&quot; &quot;$cn&quot; &quot;$san&quot; &quot;$PKEY_ALG&quot; &quot;$PKEY_PARAM&quot;
+
+ca=&quot;server-ca-2&quot;
+cn=&quot;ec.ed25519.example.com&quot;
+san=&quot;DNS:${cn}&quot;
+PKEY_ALG=ED25519
+PKEY_PARAM=&quot;&quot;
+./ca.sh gen_cert_server &quot;$ca&quot; &quot;$cn&quot; &quot;$san&quot; &quot;$PKEY_ALG&quot; &quot;$PKEY_PARAM&quot;
+
+ca=&quot;server-ca-2&quot;
+cn=&quot;ec.ed448.example.com&quot;
+san=&quot;DNS:${cn}&quot;
+PKEY_ALG=ED448
+PKEY_PARAM=&quot;&quot;
+./ca.sh gen_cert_server &quot;$ca&quot; &quot;$cn&quot; &quot;$san&quot; &quot;$PKEY_ALG&quot; &quot;$PKEY_PARAM&quot;
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">openssl</span> <span class="n">genpkey</span> <span class="o">-</span><span class="n">algorithm</span> <span class="n">ED25519</span> <span class="o">-</span><span class="n">out</span> <span class="n">秘密鍵ファイル名</span><span class="o">.</span><span class="n">pem</span>
+</pre></div>
+</div>
+<p>単体テスト</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="o">./</span><span class="n">Dockerfile</span><span class="o">/</span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span><span class="o">.</span><span class="n">yml</span> <span class="n">up</span>
+
+<span class="o">./</span><span class="n">test</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p>テスト用 Web サイト(www.example.comなど)の起動</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">ca</span><span class="o">.</span><span class="n">sh</span> <span class="n">gen_nginx_conf</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">Dockerfile</span><span class="o">.</span><span class="n">sh</span> <span class="n">run</span>
+</pre></div>
+</div>
+<div class="admonition-todo admonition" id="id7">
+<p class="admonition-title">課題</p>
+<p>エラーチェック. v オプションで指定した先にファイルが存在するか. p オプションで開放したポートにアクセスできるか.</p>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>ホストの設定<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="id5">
+<h3>認証局証明書<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>コンテナ上のウェブサーバにホストから HTTPS で接続するために、必要に応じて実施する。</p>
+<p><strong>ubuntu の場合</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo ln -s $(pwd)/www /usr/local/share/ca-certificates/toyca
+sudo update-ca-certificates
+</pre></div>
+</div>
+<p><strong>Firefox/Chrome</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">libnss3</span><span class="o">-</span><span class="n">tools</span>
+</pre></div>
+</div>
+<p>各 CA のルート証明書をブラウザにインストールする</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>install_cacert(){
+ method=$1
+ certdir=$2
+ for cacert in $(ls ca/selfsign-ca-*/cacert.pem)
+ do
+  name=$(echo $cacert | sed -e &#39;s@^ca/@@; s@/cacert.pem$@@;&#39;)
+  certutil -A -n &quot;${name}&quot; -t &quot;TC,C,T&quot; -i ${cacert} -d ${method}:${certdir}
+ done
+}
+
+# For cert8 (legacy - DBM, firefox/thunderbird)
+for certDB in $(find ~/ -name &quot;cert8.db&quot;)
+do
+ certdir=$(dirname ${certDB});
+ install_cacert dbm $certdir
+done
+
+# For cert9 (SQL, firefox/thunderbird/chrome)
+for certDB in $(find ~/ -name &quot;cert9.db&quot;)
+do
+ certdir=$(dirname ${certDB});
+ install_cacert sql $certdir
+done
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>chrome なら chrome://settings/certificates の認証局 org-ToyCA でインストールされたことを確認できる</p></li>
+<li><p>同じ CN の証明書をいくつも追加したときの影響は把握していない。古いものは都度削除したほうが良いかも</p></li>
+<li><p>その他アプリケーションの場合は各製品のドキュメント等参照</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="ip">
+<h2>IPアドレス・ホスト名<a class="headerlink" href="#ip" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>/etc/hosts などで以下のホスト名を参照できるようにしておく。</p>
+<ul class="simple">
+<li><p>ca.example.com</p></li>
+<li><p>ca.example.co.jp</p></li>
+<li><p>xn--u0h9a3d.xn--eckwd4c7cu47r2wf.jp</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="lxd">
+<h1>lxd<a class="headerlink" href="#lxd" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="id6">
+<h2>コンテナ設定<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>lxd の細かい点についてはリポジトリ lxd を参照</p>
+</div>
+<div class="section" id="litespeed">
+<h2>litespeed<a class="headerlink" href="#litespeed" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>コンパイル不要で http/3 対応ということで nginx から変更。</p>
+<p><a class="reference external" href="https://openlitespeed.org/kb/install-ols-from-litespeed-repositories/">Install OpenLiteSpeed from LiteSpeed Repositories • OpenLiteSpeed</a></p>
+<p>ubuntu 20.4 未対応なので、bionic にする</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lxc</span> <span class="n">launch</span> <span class="n">images</span><span class="p">:</span><span class="n">ubuntu</span><span class="o">/</span><span class="n">bionic</span><span class="o">/</span><span class="n">amd64</span> <span class="o">-</span><span class="n">c</span> <span class="n">lxc</span><span class="o">.</span><span class="n">container</span><span class="o">.</span><span class="n">conf</span>
+</pre></div>
+</div>
+<p>マウント</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>lxc config device add $container toyca disk source=$(pwd) path=/opt/toyca
+lxc config device add $container pki disk source=$(pwd)/www path=/etc/pki
+lxc config device remove $container toyca
+lxc config device remove $container pki
+</pre></div>
+</div>
+<p>ホストからは</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo ls /var/lib/lxd/containers/$container/rootfs
+</pre></div>
+</div>
+<p>でアクセスできた。にあるみたいだが同期はしていないようだ。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>lxc exec -- /bin/bash
+apt update
+apt install lightspeed
+
+lxc image import 
+lxc image list images:ubuntu/bionic/amd64
+lxc launch images:ubuntu/bionic/amd64
+
+lxc exec $container -- /bin/bash
+apt update
+wget -O - http://rpms.litespeedtech.com/debian/enable_lst_debian_repo.sh | bash
+apt install openlitespeed
+</pre></div>
+</div>
+<p>mysql やら php やら頼んでないパッケージを山盛りでインストールさせられるな。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cat ~/.config/lxc/config.yml 
+
+systemctl start lshttpd
+/usr/local/lsws/conf/httpd_config.conf
+
+lxc info $container
+</pre></div>
+</div>
+<p>表示されたIPの8088にアクセス</p>
+<p>テストで区別する意味はないので、管理用UIの証明書はコンテンツと共用にしておく。
+WebAdmin Settings - Listener adminListener &gt; SSL &gt; SSL Private Key &amp; Certificate</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$SERVER_ROOT/admin/conf/webadmin.key
+$SERVER_ROOT/admin/conf/webadmin.crt
+</pre></div>
+</div>
+<p>証明書チェインでないと正常と認識されない</p>
+<p>lsws の設定ファイルは /usr/local/lsws/conf にある。</p>
+<p>管理インタフェースが版管理しているように見えたが、普通に編集して再起動で良いみたいだ。</p>
+<blockquote>
+<div><p>The best and easiest way to edit the OpenLiteSpeed configuration is through the WebAdmin Console. When using WebAdmin, there is no need for you to remember OLS configuration syntax, and it is much easier for a beginner with no prior knowledge of OpenLiteSpeed. OLS configuration files are plain text. If you are an advanced OLS user and know OLS syntax, then you are certainly encouraged to use vi to edit the configuration file directly. Don't forget to restart OLS after any changes to the configuration.</p>
+</div></blockquote>
+<p><a class="reference external" href="https://openlitespeed.org/kb/ols-configuration-examples/">OpenLiteSpeed Configuration Examples • OpenLiteSpeed</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lsws</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">lswsctrl</span> <span class="n">start</span>
+</pre></div>
+</div>
+<p>でサーバと管理インタフェースが起動する。systemctl のユニット lshttpd.service でも制御できる</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">journalctl</span> <span class="o">-</span><span class="n">f</span> <span class="o">--</span><span class="n">system</span> <span class="o">--</span><span class="n">since</span> <span class="n">today</span> <span class="o">-</span><span class="n">u</span> <span class="n">lshttpd</span><span class="o">.</span><span class="n">service</span>
+<span class="n">systemctl</span> <span class="n">restart</span> <span class="n">lshttpd</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="litespeed-ssl">
+<h2>litespeed ssl 設定<a class="headerlink" href="#litespeed-ssl" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>http とは別ポートで受ける必要があるので、listner を追加する</p></li>
+<li><p>lisnter と vhost 紐付け</p></li>
+<li><p>listner か vhost で証明書設定</p></li>
+</ul>
+<p>証明書の設定は最低限以下をやっておけば良い。マウントした 秘密鍵は nobody.nobody 権限で読めるようにしておく。でないと listener が起動しない。</p>
+<ul class="simple">
+<li><p>Private Key File</p>
+<ul>
+<li><p>/opt/toyca/ca/server-ca-1/certs/ca.example.com/key.pem</p></li>
+</ul>
+</li>
+<li><p>Certificate File</p>
+<ul>
+<li><p>/opt/toyca/ca/server-ca-1/certs/ca.example.com/cert-im.pem</p></li>
+</ul>
+</li>
+<li><p>Chained Certificate</p>
+<ul>
+<li><p>No</p></li>
+</ul>
+</li>
+<li><p>CA Certificate Path</p>
+<ul>
+<li><p>/etc/pki</p></li>
+</ul>
+</li>
+<li><p>CA Certificate File</p>
+<ul>
+<li><p>/opt/toyca/ca/server-ca-1/cacert.pem</p></li>
+</ul>
+</li>
+</ul>
+<p>コンテンツは Virtual Host Example で定義されている。
+アクセスログは vhost 毎に分割されている</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tail</span> <span class="o">../</span><span class="n">lsws</span><span class="o">/</span><span class="n">Example</span><span class="o">/</span><span class="n">logs</span><span class="o">/</span><span class="n">access</span><span class="o">.</span><span class="n">log</span> 
+</pre></div>
+</div>
+</div>
+<div class="section" id="http-3">
+<h2>http/3<a class="headerlink" href="#http-3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">openssl</span> <span class="n">s_client</span> <span class="o">-</span><span class="n">connect</span> <span class="n">ca</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="mi">8443</span> <span class="o">-</span><span class="n">servername</span> <span class="n">ca</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span> <span class="o">&lt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span>
+<span class="o">...</span>
+<span class="n">New</span><span class="p">,</span> <span class="n">TLSv1</span><span class="o">.</span><span class="mi">3</span><span class="p">,</span> <span class="n">Cipher</span> <span class="ow">is</span> <span class="n">TLS_AES_256_GCM_SHA384</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">echo</span> <span class="s2">&quot;バックグラウンドで tdpdump を実行するのでここで認可させる&quot;</span>
+<span class="n">sudo</span> <span class="n">tcpdump</span> <span class="o">-</span><span class="n">s</span> <span class="mi">0</span> <span class="o">-</span><span class="n">w</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">pcap</span> <span class="o">-</span><span class="n">i</span> <span class="n">lxdbr0</span> <span class="n">host</span> <span class="mf">10.250</span><span class="o">.</span><span class="mf">120.21</span> <span class="ow">and</span> <span class="n">port</span> <span class="mi">8443</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">netstat</span> <span class="o">-</span><span class="n">uanp</span>
+</pre></div>
+</div>
+<p>待受はしている</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chrome</span> <span class="o">--</span><span class="n">enable</span><span class="o">-</span><span class="n">quic</span>
+</pre></div>
+</div>
+<p>で url にアクセスさせたが chrome の最初から tcp で聞いていて、フォールバックにはなっていないな。chrome 側のもんだいなのか?</p>
+<p><a class="reference external" href="https://www.litespeedtech.com/support/wiki/doku.php/litespeed_wiki:config:enable_quic">litespeed_wiki:config:enable_quic [LiteSpeed Wiki]</a></p>
+</div>
+<div class="section" id="curl">
+<h2>curl<a class="headerlink" href="#curl" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>chrome 側のアクセス時点で UDP にならなかったので、他のUAで確認してみる</p>
+<p><a class="reference external" href="https://github.com/curl/curl/blob/master/docs/HTTP3">curl/HTTP3.md at master · curl/curl</a></p>
+<p>curl --http3 https://ca.example.com:8443 -I</p>
+<p>bionic のパッケージ版 curl では流石に対応してなかった</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">apt</span> <span class="n">install</span> <span class="n">git</span> <span class="n">cmake</span> <span class="n">g</span><span class="o">++</span> <span class="n">golang</span> <span class="n">libunwind</span><span class="o">-</span><span class="n">dev</span> <span class="n">curl</span> <span class="n">autoconf</span> <span class="n">libtool</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://github.com/curl/curl/blob/master/docs/HTTP3">curl/HTTP3.md at master · curl/curl</a>
+の quiche version で BoringSSL, quiche, curl をビルドする</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">HTTP3</span><span class="p">:</span>            <span class="n">enabled</span> <span class="p">(</span><span class="n">quiche</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>なんで src の下に実行ファイルつくってんだ? まいいか</p>
+<p>./src/curl --http3 https://www.facebook.com/  -v -s -o /dev/null</p>
+<p>./src/curl --capath /etc/pki https://ca.example.com:8443/  -v -s -o /dev/null</p>
+<p>これが ok なら次</p>
+<p>./src/curl --capath /etc/pki --http3 https://ca.example.com:8443/  -v -s -o /dev/null</p>
+<p>なんで名前引けているんだ?</p>
+<p>コンパイルした curl なら使えるようになったな</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@main</span><span class="o">-</span><span class="n">garfish</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">curl</span><span class="c1"># ./src/curl --version</span>
+<span class="n">curl</span> <span class="mf">7.70</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">DEV</span> <span class="p">(</span><span class="n">x86_64</span><span class="o">-</span><span class="n">pc</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="p">)</span> <span class="n">libcurl</span><span class="o">/</span><span class="mf">7.70</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">DEV</span> <span class="n">BoringSSL</span> <span class="n">quiche</span><span class="o">/</span><span class="mf">0.3</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">Release</span><span class="o">-</span><span class="n">Date</span><span class="p">:</span> <span class="p">[</span><span class="n">unreleased</span><span class="p">]</span>
+<span class="n">Protocols</span><span class="p">:</span> <span class="nb">dict</span> <span class="n">file</span> <span class="n">ftp</span> <span class="n">ftps</span> <span class="n">gopher</span> <span class="n">http</span> <span class="n">https</span> <span class="n">imap</span> <span class="n">imaps</span> <span class="n">pop3</span> <span class="n">pop3s</span> <span class="n">rtsp</span> <span class="n">smb</span> <span class="n">smbs</span> <span class="n">smtp</span> <span class="n">smtps</span> <span class="n">telnet</span> <span class="n">tftp</span> 
+<span class="n">Features</span><span class="p">:</span> <span class="n">alt</span><span class="o">-</span><span class="n">svc</span> <span class="n">AsynchDNS</span> <span class="n">HTTP3</span> <span class="n">HTTPS</span><span class="o">-</span><span class="n">proxy</span> <span class="n">IPv6</span> <span class="n">Largefile</span> <span class="n">NTLM</span> <span class="n">NTLM_WB</span> <span class="n">SSL</span> <span class="n">UnixSockets</span>
+</pre></div>
+</div>
+<p>え curl て http 以外でも使えるの? しらんかった</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@main</span><span class="o">-</span><span class="n">garfish</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">curl</span><span class="c1"># ./src/curl --capath /etc/pki --http3 https://ca.example.com:8443/  -v -s -o /dev/null</span>
+<span class="o">*</span>   <span class="n">Trying</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mf">8443.</span><span class="o">..</span>
+</pre></div>
+</div>
+<p>localhost でも応答がない. FB には curl でアクセス出来ているから、これは litespeed にも問題があるということ?</p>
+<p>http3 は最初のパケットに応答していないので載らないな</p>
+<p>Server Configuration &gt; Tuning &gt; QUIC</p>
+<p>にも設定項目があるが、デフォルトで有効になっているので関係ないか。
+正直わからん、飛ばす。</p>
+</div>
+</div>
+<div class="section" id="ocsp">
+<h1>OCSP<a class="headerlink" href="#ocsp" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>openssl ocsp-issuer [CA証明書]-serial [失効確認する証明書のシリアル番号（10進数か、「0x」を前につけた16進数)]-url [OCSPレスポンダーのURL（ホスト名：ポート番号（デフォルトでは2560））]-VAfile [OCSP証明書]-CAfile [CA証明書]</p>
+<p>Apr 18 08:08:53 main-garfish ocspd[17144]: [crl.c:230] [ERROR] CRL signature is NOT verified [Code: 0, CA Subject: O=ToyCA, CN=selfsign-ca-1]!</p>
+<p>www 更新してないからとか?</p>
+<p>openssl crl -CAfile /usr/etc/ocspd/certs/cacert.pem -in /usr/etc/ocspd/crls/selfsign-ca-1.crl
+verify OK</p>
+<p>openssl crl -CAfile /usr/etc/ocspd/certs/cacert.pem -in /usr/etc/ocspd/crls/server-ca-1.crl
+verify OK</p>
+<p>??</p>
+<p>cd /opt/toyca/ca/selfsign-ca-1
+openssl ocsp -index index.txt -CA cacert.pem -rsigner cacert.pem -rkey private/cakey.pem -port 2560
+openssl ocsp -issuer cacert.pem -nonce -CAfile cacert.pem -url http://localhost:2560/ -cert cacert.pem</p>
+<p>openssl ocsp では確認できるが、index.txt を使うので一つのCAしか指定できないな。</p>
+<p>80 番で vhost を動作させて cert/crl 置き場にアクセスできるようにすると起動した
+ローカルの crl を読み込んでくれないってことかなんで? パスの指定は cacert と同じはずなのに。。。
+? パス指定でも死ななくなった? working directory 指定が効いた?</p>
+<p>設定ファイル
+/usr/var/run/ocspd.pid</p>
+<p>www-data</p>
+<p>うーん OCSP レスポンダまともなやつなくない?
+ここまで面倒なら URI で振り分けてポートは集約するとして、 openssl から CA 数分起動してしまうほうがらくかもな。</p>
+<p>port=12560
+for ca in selfsign-ca-1 server-ca-1 choroi-ca-1
+do
+port=$(($port+1))
+cat &lt;<EOF > /etc/systemd/system/ocsp-$ca.service
+[Unit]
+Description=OCSP $ca
+After=network.target</p>
+<p>[Service]
+SyslogIdentifier=ocsp-$ca
+Type=simple
+WorkingDirectory=/opt/toyca/ca/$ca
+ExecStart=/usr/bin/openssl ocsp -index index.txt -CA cacert.pem -rsigner cacert.pem -rkey private/cakey.pem -port $port
+PIDFile=/var/run/ocsp-$ca.pid</p>
+<p>[Install]
+WantedBy=multi-user.target
+EOF
+done</p>
+<p>systemctl daemon-reload
+systemctl start ocsp-selfsign-ca-1
+systemctl status ocsp-selfsign-ca-1</p>
+<p>上記で openssl で起動して openlitespeed で</p>
+<ul class="simple">
+<li><p>virtual host の external app と context で起動プロセスに振り分け
+cat /usr/local/lsws/conf/vhosts/Example/vhconf.conf</p></li>
+</ul>
+<p>extprocessor selfsign-ca-1 {
+type                    proxy
+address                 http://ca.example.com:12561
+maxConns                1
+initTimeout             10
+retryTimeout            10
+respBuffer              0
+}</p>
+<p>extprocessor server-ca-1 {
+type                    proxy
+address                 http://ca.example.com:12562
+maxConns                1
+initTimeout             10
+retryTimeout            10
+respBuffer              0
+}</p>
+<p>extprocessor choroi-ca-1 {
+type                    proxy
+address                 http://ca.example.com:12563
+maxConns                1
+initTimeout             10
+retryTimeout            10
+respBuffer              0
+}</p>
+<p>context /ocsp/selfsign-ca-1 {
+type                    proxy
+handler                 selfsign-ca-1
+addDefaultCharset       off
+}</p>
+<p>context /ocsp/server-ca-1 {
+type                    proxy
+handler                 server-ca-1
+addDefaultCharset       off
+}</p>
+<p>context /ocsp/choroi-ca-1 {
+type                    proxy
+handler                 choroi-ca-1
+addDefaultCharset       off
+}</p>
+<p>でどうにかなるな。</p>
+<p>では AIA の url をこれベースに変更しよう。</p>
+<ul class="simple">
+<li><p>http://ca.example.com/ocsp/selfsign-ca-1</p></li>
+<li><p>http://ca.example.com/ocsp/server-ca-1</p></li>
+<li><p>http://ca.example.com/ocsp/choroi-ca-1</p></li>
+</ul>
+</div>
+<div class="section" id="gh-pages">
+<h1>gh-pages<a class="headerlink" href="#gh-pages" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<ul class="simple">
+<li><p>設定方法はリポジトリ project/git を参照</p></li>
+<li><p>doc/00-setup.md (このファイル)は公開しない。 .gitignore に入れる</p></li>
+<li><p>リリースする契機を決めていないので、このページを更新するのは整形されたHTMLで読みたくなったら、としておく</p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="01.html" class="btn btn-neutral float-right" title="方針" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="ToyCA - 検証用認証局" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, mo
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

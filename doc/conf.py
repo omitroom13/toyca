@@ -29,6 +29,7 @@ author = 'mo'
 extensions = [
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.todo',
+    'sphinx.ext.githubpages',
     'sphinxcontrib.blockdiag',
     'sphinxcontrib.seqdiag',
     'sphinxcontrib.actdiag',

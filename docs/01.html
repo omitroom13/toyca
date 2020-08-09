@@ -1,0 +1,476 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ja" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ja" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>方針 &mdash; ToyCA  ドキュメント</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="その他" href="02.html" />
+    <link rel="prev" title="インストール" href="00-setup.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ToyCA
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="00-setup.html">インストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-setup.html#lxd">lxd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-setup.html#ocsp">OCSP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-setup.html#gh-pages">gh-pages</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">方針</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">命名規則</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">構成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">有効期間</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">世代管理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">クロスルート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#crl">失効（CRL）</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#crl-distribution-point">CRL Distribution Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#authority-information-access">Authority Information Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">秘密鍵管理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">セルフサービス</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">サーバ証明書</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">クライアント証明書</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ca">プロクシサーバ(CA)証明書</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">エンタープライズCA証明書</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="02.html">その他</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03.html">参考文献・メモ</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ToyCA</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>方針</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/01.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>方針<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>主に openssl を用いた、テスト用の認証局設定。デモとして運用シナリオをスクリプトで表現しているわけではないので、脳内設定に過ぎない。検証用の証明書作らせろこまけぇことはいいんだよ、という人は運用/サーバ証明書の生成を参照。</p>
+<div class="section" id="id2">
+<h2>命名規則<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>認証局(CA)のコモンネーム(CN)には世代を識別するための番号をつけ運用期間全体を通して一意にする</p></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>構成<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ルート-中間の2階層とし、以下のように役割を設定する:</p>
+<ul class="simple">
+<li><p>selfsign-ca-n</p>
+<ul>
+<li><p>n 代目自己署名(おれおれ)CA。これをルートとする</p></li>
+</ul>
+</li>
+<li><p>server-n</p>
+<ul>
+<li><p>n 代目サーバ証明書用中間CA</p></li>
+</ul>
+</li>
+<li><p>client-ca-n</p>
+<ul>
+<li><p>n 代目クライアント証明書用中間CA</p></li>
+</ul>
+</li>
+<li><p>enterprise-ca-n</p>
+<ul>
+<li><p>n 代目エンタープライズCA(中間＝下位CA)</p></li>
+</ul>
+</li>
+<li><p>proxy-ca-n</p>
+<ul>
+<li><p>n 代目プロクシサーバ用CA</p></li>
+</ul>
+</li>
+<li><p>choroi-ca-n</p>
+<ul>
+<li><p>n 代目どのようなCRLにも署名するCA。有効期間も指定可能</p></li>
+</ul>
+</li>
+</ul>
+<p>CAはホストca.example.com, enterprise.example.com に対して次のように配置する:</p>
+<ul class="simple">
+<li><p>ca.example.com</p>
+<ul>
+<li><p>linux/openssl</p></li>
+<li><p>enterprise-ca-n 以外の認証局を置く</p></li>
+</ul>
+</li>
+<li><p>enterprise.example.com</p>
+<ul>
+<li><p>windows/エンタープライズ CA</p></li>
+<li><p>enterprise-ca-n を置く</p></li>
+<li><p>一時期検証環境に含めていたが、2018年現在は含めていない</p></li>
+</ul>
+</li>
+</ul>
+<p>ここでは openssl 中心の構成としたが、次のような選択肢もある:</p>
+<ul class="simple">
+<li><p>Windows とその他(openssl)で独立したPKIにする</p>
+<ul>
+<li><p>この事例が殆どでいくつもルート証明書を端末にインストールさせるところをGPOで隠蔽していると思われる。</p></li>
+</ul>
+</li>
+<li><p>Windows の CA で統一する</p>
+<ul>
+<li><p>証明書テンプレートの扱いに慣れれば可能なはずだが、.ini から CSR を作成するところで openssl の知識が結局必要になり、あまり事例がなさそうなのではまる気がする</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h2>有効期間<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>CAの存続期間は4年とする</p>
+<ul>
+<li><p>choroi-ca と proxy-ca で発行する CA 証明書は除く</p></li>
+</ul>
+</li>
+<li><p>エンドエンティティ(サーバ・クライアント)の証明書の有効期間について、以下の通りとする</p>
+<ul>
+<li><p>申請日より前の新CAの開局日を起点とする。2016/1/1 00:00:00 開設で 2017/3/1 00:00:00 申請の場合、起点は 2017/1/1 00:00:00</p></li>
+<li><p>起点より2年間または新CAの閉局時刻の先に訪れるほうを終点とする</p></li>
+<li><p>つまり</p>
+<ul>
+<li><p>申請月日で有効期間に1年～2年の幅がでる</p></li>
+<li><p>上位CAより先の期限をもつ証明書は発行しない</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h2>世代管理<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>2年ごとに次世代CAを開局する。2年間は新旧のCAを併存させ、順次いれかえていく</p>
+<ul>
+<li><p>ルート証明書の期限切れがサービスに与える影響を抑える</p></li>
+<li><p>次の要素のバランスをとるという観点で設定</p>
+<ul>
+<li><p>暗号・ハッシュアルゴリズムの危殆化リスク(短いほど低い)</p></li>
+<li><p>運用の習熟度(短いほど高い)</p></li>
+<li><p>運用・ユーザの対応負荷(短いほど高い)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>エンドエンティティに対する想定</p>
+<ul>
+<li><p>複数(ここでは2種)のルート証明書を設定できる</p></li>
+<li><p>4年程度のうちにエンドユーザ端末は代替わりし、証明書のインストールは初期設定時時のみで済む</p>
+<ul>
+<li><p>あるいはルート証明書の配付機構がある(ADに参加しているとか)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h2>クロスルート<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>2年ごとの新CA開設時に以下の対応を行う</p>
+<ul class="simple">
+<li><p><strong>旧ルートCA</strong>で新中間CAを署名し(NewWithOld証明書)、各サーバから配布するよう証明書チェインを構成する</p>
+<ul>
+<li><p>新CA開設以降の証明書は新CAから発行されることになるが、クロスルート証明書により既存端末のルート証明書更新は不要になる</p></li>
+</ul>
+</li>
+<li><p>NewWithOld証明書の運用に加えて、を運用すればCA証明書の期限をまたいだサーバ証明書を発行・運用できるが、サーバ毎に証明書の期限が異なると運用が面倒なのでやらない</p>
+<ul>
+<li><p>これにより証明書の期限は最短2年になる</p></li>
+</ul>
+</li>
+<li><p>中間CAを<strong>新ルートCA</strong>で署名し(OldWithNew 証明書)、各サーバから配布するよう証明書チェインを構成する</p>
+<ul>
+<li><p>新世代の端末に旧世代の証明書をインストールする必要がない</p></li>
+</ul>
+</li>
+<li><p>サーバ証明書を新世代の中間認証局で再署名しても、旧世代の端末はルート証明書のインストール等は(旧世代CAの期限切れまで)必要ない</p></li>
+<li><p>中間認証局証明書の危殆化が問題になる場合は更新が必要になる</p></li>
+<li><p>実際のクロスルート証明書は以下のようなケースでしか利用されない</p></li>
+<li><p>ハードウェアの問題から既存端末のルート証明書は更新できないが、危殆化などの問題から新規端末のルート証明書は更新したい場合</p></li>
+</ul>
+</div>
+<div class="section" id="crl">
+<h2>失効（CRL）<a class="headerlink" href="#crl" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>サーバ証明書ではCRLの設定は案外適当でも問題は発生しづらいが、Windows の認証ではチェックされるため設計しておく</p>
+<ul class="simple">
+<li><p>Active Directory ドメイン内での利用に限らないため、(ldap://やfile://ではなく) http:// で失効を確認できるようにしておく</p></li>
+<li><p>OCSP は使用しない</p></li>
+<li><p>失効の理由は深く考えない</p>
+<ul>
+<li><p>onlyContainsUserCerts, onlyContainsCACerts, onlySomeReasons はつけない</p></li>
+</ul>
+</li>
+<li><p>差分CRLは基本的には扱わない</p>
+<ul>
+<li><p>エンタープライズCAのようにデフォルトで生成されてしまうなら仕方ない</p></li>
+</ul>
+</li>
+</ul>
+<div class="section" id="crl-distribution-point">
+<h3>CRL Distribution Point<a class="headerlink" href="#crl-distribution-point" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>以下のURLで各エンドエンティティからCRLを参照可能にする。</p>
+<ul class="simple">
+<li><p>http://ca.example.com/</p>
+<ul>
+<li><p>selfsign-ca-n.crl</p></li>
+<li><p>server-n.crl</p></li>
+<li><p>client-ca-n.crl</p></li>
+<li><p>enterprise-ca-n.crl</p></li>
+<li><p>enterprise-ca-n+.crl</p></li>
+<li><p>proxy-ca-n.crl</p></li>
+<li><p>choroi-ca-n.crl</p></li>
+</ul>
+</li>
+<li><p>CAで生成したCRLが簡単にコピーできる場所に配置すること</p>
+<ul>
+<li><p>静的ファイルなので hosts ファイルなどでやりくりできるなら異なるIPをもったウェブサーバでホストしてもよいが、この点で面倒になるかもしれない</p></li>
+</ul>
+</li>
+<li><p>mime 的観点で拡張子は(pem などではなく)crl とする</p></li>
+<li><p>enterprise-ca-n-<strong>+</strong>.crl はエンタープライズCRLがデフォルトで生成する差分CRLを指している。Windows/IIS にCRL配布点を置く場合は次のどちらかで対応しておく</p>
+<ul>
+<li><ul>
+<li><p>を含んだファイル名にアクセスできるウェブサーバを設定する(IISは設定が必要)</p></li>
+</ul>
+</li>
+<li><p>問題の起きない文字を使って生成するようエンタープライズCAを設定しておく</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="authority-information-access">
+<h3>Authority Information Access<a class="headerlink" href="#authority-information-access" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>以下のURLで各エンドエンティティからCRLを参照可能にする。</p>
+<ul class="simple">
+<li><p>http://ca.example.com/</p>
+<ul>
+<li><p>selfsign-ca-n.cer</p></li>
+<li><p>server-n.cer</p></li>
+<li><p>client-ca-n.cer</p></li>
+<li><p>enterprise-ca-n.cer</p></li>
+<li><p>proxy-ca-n.cer</p></li>
+<li><p>choroi-ca-n.cer</p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>秘密鍵管理<a class="headerlink" href="#id7" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>client-ca-n, choroi-ca-n では秘密鍵を保存せず、CSRを申請者から受領・署名・証明書発行する普通のCAとする</p></li>
+<li><p>その他のCAはCSR・秘密鍵生成・証明書をその場で(同一組織で)行う。バックアップのため秘密鍵はそのまま保存する</p></li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h2>セルフサービス<a class="headerlink" href="#id8" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>client-ca-n, choroi-ca-n は SAN にメールアドレスを加えた CSR を送ると即署名して送り返すとか、なんかそんな感じにする</p></li>
+</ul>
+</div>
+<div class="section" id="id9">
+<h2>サーバ証明書<a class="headerlink" href="#id9" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>管理インタフェースなど、TLS/SSLを使用している(デフォルトで自己証明書を用いるていたりする)機器に対しては原則サーバ証明書を発行して運用する</p>
+<ul>
+<li><p>letsencrypt したいのはここなんだよなぁ</p></li>
+<li><p>ユーザに製品デフォルトの自己証明書をインポートさせたり、ブラウザの警告を毎回無視させる運用を避ける</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id10">
+<h2>クライアント証明書<a class="headerlink" href="#id10" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>エンタープライズCAでスマートカード(PIV)対応できるように x.503 拡張設定を入れる</p>
+</div>
+<div class="section" id="ca">
+<h2>プロクシサーバ(CA)証明書<a class="headerlink" href="#ca" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>通常のウェブサーバやロードバランサはサーバ証明書と中間証明書を単に連結したファイルをサーバ証明書として設定することで、クライアント側で証明書チェーンを確認できるよう取り計らってくれるが、製品によっては中間証明書を扱うことができない場合がある。ルートCAから直接生成するはめになったりするので対象プロダクトの仕様を確認すること。</p>
+</div>
+<div class="section" id="id11">
+<h2>エンタープライズCA証明書<a class="headerlink" href="#id11" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>...代替わりできるのかな?</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="02.html" class="btn btn-neutral float-right" title="その他" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="00-setup.html" class="btn btn-neutral float-left" title="インストール" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, mo
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
