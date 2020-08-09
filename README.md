@@ -4,4 +4,5 @@
 
 ## ドキュメント
 
-https://omitroom13.github.io/toyca/
+https://omitroom13.github.io/toyca/index.html
+
